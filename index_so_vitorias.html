@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Só vitorias 💍✈️</title>
+    
+    <style>
+        /* ==============================
+           ESTILOS (CSS)
+        ============================== */
+        :root {
+            --azul-confianca: #0056b3;
+            --azul-claro: #e6f0ff;
+            --amarelo-felicidade: #ffb703;
+            --vermelho-apagar: #ff4d4d;
+            --fundo: #f8f9fa;
+            --texto: #333333;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--fundo);
+            color: var(--texto);
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: var(--azul-confianca);
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            border-bottom: 5px solid var(--amarelo-felicidade);
+            position: relative;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+
+        /* Seletor de Moeda no Topo */
+        .currency-selector {
+            margin-top: 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            font-weight: bold;
+        }
+
+        .currency-selector select {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            border: 2px solid white;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-weight: bold;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .currency-selector select option {
+            color: black;
+        }
+
+        /* Estilos das Abas */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .tab-btn {
+            background-color: transparent;
+            color: white;
+            border: 2px solid white;
+            border-radius: 20px;
+            padding: 0.5rem 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background-color: var(--amarelo-felicidade);
+            color: #000;
+            border-color: var(--amarelo-felicidade);
+        }
+
+        .tab-content { display: none; }
+        .active-tab { display: block; }
+
+        main {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-top: 4px solid var(--amarelo-felicidade);
+            position: relative;
+        }
+
+        h2 { color: var(--azul-confianca); margin-top: 0; }
+
+        input {
+            padding: 0.8rem;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .row-inputs { flex-direction: row; flex-wrap: wrap; }
+        .row-inputs input { flex: 1; min-width: 150px; }
+        
+        .grid-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .date-group { display: flex; flex-direction: column; font-size: 0.9rem; color: #555; }
+
+        button {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        button:active { transform: scale(0.98); }
+        .btn-primary { background-color: var(--amarelo-felicidade); color: #000; }
+        .btn-secondary { background-color: var(--azul-confianca); color: white; grid-column: span 2; }
+        
+        .btn-delete {
+            background-color: transparent;
+            color: var(--vermelho-apagar);
+            font-size: 1.2rem;
+            padding: 0.2rem 0.5rem;
+        }
+
+        /* Metas e Barra de Progresso */
+        .goal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .goal-title-area { display: flex; align-items: center; gap: 10px; }
+
+        .progress-text { font-weight: bold; color: var(--azul-confianca); }
+        .progress-bar {
+            width: 100%; height: 20px; background-color: var(--azul-claro);
+            border-radius: 10px; overflow: hidden; margin-bottom: 1.5rem;
+        }
+        .progress-fill {
+            height: 100%; background-color: var(--amarelo-felicidade);
+            transition: width 0.4s ease; width: 0%;
+        }
+
+        .step-list { list-style: none; padding: 0; }
+        .step-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0.8rem; background: var(--fundo); margin-bottom: 0.5rem;
+            border-radius: 6px; border-left: 4px solid #ccc;
+        }
+        .step-item.completed { border-left-color: #28a745; opacity: 0.7; }
+        .step-item.completed label { text-decoration: line-through; }
+        .step-price { font-weight: bold; color: #555; }
+        .btn-small { padding: 0.5rem 1rem; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+    <!-- ==============================
+         ESTRUTURA (HTML)
+    ============================== -->
+    <header>
+        <h1>Só vitorias 🎉</h1>
+        <p>O caminho para o nosso final feliz!</p>
+        
+        <!-- Seletor de Moedas -->
+        <div class="currency-selector">
+            <label>Moeda Principal:</label>
+            <select id="global-currency">
+                <option value="BRL">Real (R$)</option>
+                <option value="AOA">Kwanza (Kz)</option>
+            </select>
+        </div>
+
+        <!-- Menu de Abas -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="showTab('metas', event)">Metas e Etapas 🎯</button>
+            <button class="tab-btn" onclick="showTab('devedores', event)">Devedores 💸</button>
+        </div>
+    </header>
+
+    <main>
+        <!-- ABA 1: METAS E ETAPAS -->
+        <section id="metas" class="tab-content active-tab">
+            <div class="card add-meta-card">
+                <h2>Criar Nova Meta Principal 🌟</h2>
+                <div class="form-group row-inputs">
+                    <input type="text" id="main-goal-name" placeholder="Ex: Viagem da Kiriana">
+                    <button class="btn-primary" onclick="createGoal()">Criar Meta</button>
+                </div>
+            </div>
+
+            <!-- Div onde as metas criadas vão aparecer -->
+            <div id="goals-container">
+                <!-- Meta de Exemplo (Sem o passaporte haha) -->
+                <div class="card goal-card">
+                    <div class="goal-header">
+                        <div class="goal-title-area">
+                            <h2>✈️ Viagem da Kiriana</h2>
+                            <button class="btn-delete" onclick="deleteGoal(this)" title="Apagar Meta">🗑️</button>
+                        </div>
+                        <span class="progress-text">0% Concluído</span>
+                    </div>
+                    
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+
+                    <div class="form-group row-inputs step-input-group">
+                        <input type="text" class="step-desc" placeholder="Nova etapa (Ex: Comprar malas)">
+                        <input type="number" class="step-price-input" placeholder="Preço (Opcional)">
+                        <button class="btn-primary btn-small" onclick="addStep(this)">Add Etapa</button>
+                    </div>
+
+                    <ul class="step-list">
+                        <!-- Etapas entram aqui -->
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABA 2: DEVEDORES -->
+        <section id="devedores" class="tab-content">
+            <div class="card">
+                <h2>Controle de Devedores 💸</h2>
+                <div class="form-group grid-inputs">
+                    <input type="text" id="debt-name" placeholder="Nome da pessoa">
+                    <input type="number" id="debt-amount" placeholder="Valor emprestado">
+                    
+                    <div class="date-group">
+                        <label>Data de Empréstimo</label>
+                        <input type="date" id="debt-start">
+                    </div>
+                    <div class="date-group">
+                        <label>Data de Devolução</label>
+                        <input type="date" id="debt-end">
+                    </div>
+
+                    <input type="number" id="debt-interest" placeholder="Juros em %">
+                    <input type="number" id="debt-total" placeholder="Total a devolver" readonly title="Calculado automaticamente">
+                    
+                    <button id="add-debt-btn" class="btn-secondary">Registrar Empréstimo</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        /* ==============================
+           LÓGICA (JAVASCRIPT)
+        ============================== */
+
+        // 1. Lógica das Abas
+        function showTab(tabId, event) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active-tab'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active-tab');
+            if(event) event.currentTarget.classList.add('active');
+        }
+
+        // 2. Formatação de Moeda
+        function formatMoney(value) {
+            const currency = document.getElementById('global-currency').value;
+            if (!value) return '';
+            
+            if (currency === 'AOA') {
+                return `Kz ${parseFloat(value).toLocaleString('pt-AO', { minimumFractionDigits: 2 })}`;
+            } else {
+                return `R$ ${parseFloat(value).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
+            }
+        }
+
+        // 3. Criar Nova Meta
+        function createGoal() {
+            const goalNameInput = document.getElementById('main-goal-name');
+            if (!goalNameInput.value.trim()) return alert("Dê um nome para a meta!");
+
+            const container = document.getElementById('goals-container');
+            const newCard = document.createElement('div');
+            newCard.className = 'card goal-card';
+            
+            newCard.innerHTML = `
+                <div class="goal-header">
+                    <div class="goal-title-area">
+                        <h2>🎯 ${goalNameInput.value}</h2>
+                        <button class="btn-delete" onclick="deleteGoal(this)" title="Apagar Meta">🗑️</button>
+                    </div>
+                    <span class="progress-text">0% Concluído</span>
+                </div>
+                <div class="progress-bar"><div class="progress-fill"></div></div>
+                <div class="form-group row-inputs step-input-group">
+                    <input type="text" class="step-desc" placeholder="Nova etapa...">
+                    <input type="number" class="step-price-input" placeholder="Preço (Opcional)">
+                    <button class="btn-primary btn-small" onclick="addStep(this)">Add Etapa</button>
+                </div>
+                <ul class="step-list"></ul>
+            `;
+            
+            container.insertBefore(newCard, container.firstChild);
+            goalNameInput.value = ''; // Limpa o campo
+        }
+
+        // 4. Apagar Meta
+        function deleteGoal(btn) {
+            if(confirm("Tem certeza que deseja apagar esta meta inteira?")) {
+                const card = btn.closest('.goal-card');
+                card.remove();
+            }
+        }
+
+        // 5. Adicionar Etapa dentro de uma Meta
+        function addStep(btn) {
+            const card = btn.closest('.goal-card');
+            const descInput = card.querySelector('.step-desc');
+            const priceInput = card.querySelector('.step-price-input');
+            const list = card.querySelector('.step-list');
+
+            if (!descInput.value.trim()) return alert("Descreva a etapa!");
+
+            const priceText = priceInput.value ? formatMoney(priceInput.value) : '';
+            
+            const li = document.createElement('li');
+            li.className = 'step-item';
+            li.innerHTML = `
+                <label>
+                    <input type="checkbox" onchange="updateProgress(this)"> ${descInput.value}
+                </label>
+                <span class="step-price">${priceText}</span>
+            `;
+
+            list.appendChild(li);
+            
+            // Limpa os campos após adicionar
+            descInput.value = '';
+            priceInput.value = '';
+            
+            // Atualiza a barra de progresso
+            updateProgress(li.querySelector('input'));
+        }
+
+        // 6. Atualizar Barra de Progresso
+        function updateProgress(checkbox) {
+            const card = checkbox.closest('.goal-card');
+            const listItem = checkbox.closest('.step-item');
+            
+            // Estilo visual da etapa concluída
+            if(checkbox.checked) {
+                listItem.classList.add('completed');
+            } else {
+                listItem.classList.remove('completed');
+            }
+
+            // Cálculo da porcentagem
+            const totalSteps = card.querySelectorAll('input[type="checkbox"]').length;
+            const checkedSteps = card.querySelectorAll('input[type="checkbox"]:checked').length;
+            
+            let percentage = 0;
+            if (totalSteps > 0) {
+                percentage = Math.round((checkedSteps / totalSteps) * 100);
+            }
+
+            card.querySelector('.progress-fill').style.width = percentage + '%';
+            card.querySelector('.progress-text').innerText = percentage + '% Concluído';
+        }
+
+        // 7. Cálculo de Juros dos Devedores (Mantido)
+        const amountInput = document.getElementById('debt-amount');
+        const interestInput = document.getElementById('debt-interest');
+        const totalInput = document.getElementById('debt-total');
+
+        function calculateTotal() {
+            const amount = parseFloat(amountInput.value) || 0;
+            const interestRate = parseFloat(interestInput.value) || 0;
+            if (amount > 0) {
+                const total = amount + (amount * (interestRate / 100));
+                totalInput.value = total.toFixed(2);
+            } else {
+                totalInput.value = '';
+            }
+        }
+
+        amountInput.addEventListener('input', calculateTotal);
+        interestInput.addEventListener('input', calculateTotal);
+
+    </script>
+</body>
+</html>
