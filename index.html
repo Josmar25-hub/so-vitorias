@@ -35,165 +35,78 @@
             position: relative;
         }
 
-        header h1 {
-            margin: 0;
-            font-size: 2.5rem;
-        }
+        header h1 { margin: 0; font-size: 2.5rem; }
 
-        /* Seletor de Moeda no Topo */
         .currency-selector {
             margin-top: 1rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            font-weight: bold;
+            display: flex; justify-content: center; align-items: center; gap: 10px; font-weight: bold;
         }
 
         .currency-selector select {
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            border: 2px solid white;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            font-weight: bold;
-            outline: none;
-            cursor: pointer;
+            padding: 0.3rem 0.8rem; border-radius: 20px; border: 2px solid white;
+            background: rgba(255, 255, 255, 0.2); color: white; font-weight: bold; outline: none; cursor: pointer;
         }
+        .currency-selector select option { color: black; }
 
-        .currency-selector select option {
-            color: black;
-        }
-
-        /* Estilos das Abas */
-        .tabs {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-
+        .tabs { display: flex; justify-content: center; gap: 1rem; margin-top: 1.5rem; }
         .tab-btn {
-            background-color: transparent;
-            color: white;
-            border: 2px solid white;
-            border-radius: 20px;
-            padding: 0.5rem 1.5rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            background-color: transparent; color: white; border: 2px solid white;
+            border-radius: 20px; padding: 0.5rem 1.5rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease;
         }
-
-        .tab-btn.active {
-            background-color: var(--amarelo-felicidade);
-            color: #000;
-            border-color: var(--amarelo-felicidade);
-        }
-
+        .tab-btn.active { background-color: var(--amarelo-felicidade); color: #000; border-color: var(--amarelo-felicidade); }
         .tab-content { display: none; }
         .active-tab { display: block; }
 
-        main {
-            max-width: 800px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
-
+        main { max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
         .card {
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            border-top: 4px solid var(--amarelo-felicidade);
-            position: relative;
+            background: white; border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-top: 4px solid var(--amarelo-felicidade); position: relative;
         }
 
         h2 { color: var(--azul-confianca); margin-top: 0; }
+        input { padding: 0.8rem; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem; width: 100%; box-sizing: border-box; }
 
-        input {
-            padding: 0.8rem;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 1rem;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
+        .form-group { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1.5rem; }
         .row-inputs { flex-direction: row; flex-wrap: wrap; }
         .row-inputs input { flex: 1; min-width: 150px; }
-        
         .grid-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
         .date-group { display: flex; flex-direction: column; font-size: 0.9rem; color: #555; }
 
-        button {
-            padding: 0.8rem 1.5rem;
-            border: none;
-            border-radius: 6px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
+        button { padding: 0.8rem 1.5rem; border: none; border-radius: 6px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: transform 0.2s; }
         button:active { transform: scale(0.98); }
         .btn-primary { background-color: var(--amarelo-felicidade); color: #000; }
         .btn-secondary { background-color: var(--azul-confianca); color: white; grid-column: span 2; }
         
-        .btn-delete {
-            background-color: transparent;
-            color: var(--vermelho-apagar);
-            font-size: 1.2rem;
-            padding: 0.2rem 0.5rem;
-        }
+        .btn-delete { background-color: transparent; color: var(--vermelho-apagar); font-size: 1.2rem; padding: 0.2rem 0.5rem; }
 
-        /* Metas e Barra de Progresso */
-        .goal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.5rem;
-        }
-
+        /* Estilos Metas */
+        .goal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
         .goal-title-area { display: flex; align-items: center; gap: 10px; }
-
         .progress-text { font-weight: bold; color: var(--azul-confianca); }
-        .progress-bar {
-            width: 100%; height: 20px; background-color: var(--azul-claro);
-            border-radius: 10px; overflow: hidden; margin-bottom: 1.5rem;
-        }
-        .progress-fill {
-            height: 100%; background-color: var(--amarelo-felicidade);
-            transition: width 0.4s ease; width: 0%;
-        }
-
+        .progress-bar { width: 100%; height: 20px; background-color: var(--azul-claro); border-radius: 10px; overflow: hidden; margin-bottom: 1.5rem; }
+        .progress-fill { height: 100%; background-color: var(--amarelo-felicidade); transition: width 0.4s ease; width: 0%; }
+        
         .step-list { list-style: none; padding: 0; }
-        .step-item {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 0.8rem; background: var(--fundo); margin-bottom: 0.5rem;
-            border-radius: 6px; border-left: 4px solid #ccc;
-        }
+        .step-item { display: flex; justify-content: space-between; align-items: center; padding: 0.8rem; background: var(--fundo); margin-bottom: 0.5rem; border-radius: 6px; border-left: 4px solid #ccc; }
         .step-item.completed { border-left-color: #28a745; opacity: 0.7; }
         .step-item.completed label { text-decoration: line-through; }
         .step-price { font-weight: bold; color: #555; }
         .btn-small { padding: 0.5rem 1rem; font-size: 0.9rem; }
+
+        /* Estilos Devedores */
+        .debt-list { list-style: none; padding: 0; margin-top: 1rem; }
+        .debt-item { background: var(--fundo); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid var(--azul-confianca); display: flex; justify-content: space-between; align-items: center; }
+        .debt-info h3 { margin: 0 0 0.5rem 0; color: var(--azul-confianca); font-size: 1.1rem; }
+        .debt-info p { margin: 0; font-size: 0.9rem; color: #555; }
+        .debt-total-display { font-size: 1.2rem; font-weight: bold; color: #000; }
     </style>
 </head>
 <body>
 
-    <!-- ==============================
-         ESTRUTURA (HTML)
-    ============================== -->
     <header>
         <h1>Só vitorias 🎉</h1>
         <p>O caminho para o nosso final feliz!</p>
         
-        <!-- Seletor de Moedas -->
         <div class="currency-selector">
             <label>Moeda Principal:</label>
             <select id="global-currency">
@@ -202,10 +115,9 @@
             </select>
         </div>
 
-        <!-- Menu de Abas -->
         <div class="tabs">
-            <button class="tab-btn active" onclick="showTab('metas', event)">Metas e Etapas 🎯</button>
-            <button class="tab-btn" onclick="showTab('devedores', event)">Devedores 💸</button>
+            <button class="tab-btn active" id="btn-tab-metas">Metas e Etapas 🎯</button>
+            <button class="tab-btn" id="btn-tab-devedores">Devedores 💸</button>
         </div>
     </header>
 
@@ -216,184 +128,195 @@
                 <h2>Criar Nova Meta Principal 🌟</h2>
                 <div class="form-group row-inputs">
                     <input type="text" id="main-goal-name" placeholder="Ex: Viagem da Kiriana">
-                    <button class="btn-primary" onclick="createGoal()">Criar Meta</button>
+                    <button class="btn-primary" id="btn-create-meta">Criar Meta na Nuvem ☁️</button>
                 </div>
             </div>
-
-            <!-- Div onde as metas criadas vão aparecer -->
-            <div id="goals-container">
-                <!-- Meta de Exemplo (Sem o passaporte haha) -->
-                <div class="card goal-card">
-                    <div class="goal-header">
-                        <div class="goal-title-area">
-                            <h2>✈️ Viagem da Kiriana</h2>
-                            <button class="btn-delete" onclick="deleteGoal(this)" title="Apagar Meta">🗑️</button>
-                        </div>
-                        <span class="progress-text">0% Concluído</span>
-                    </div>
-                    
-                    <div class="progress-bar">
-                        <div class="progress-fill"></div>
-                    </div>
-
-                    <div class="form-group row-inputs step-input-group">
-                        <input type="text" class="step-desc" placeholder="Nova etapa (Ex: Comprar malas)">
-                        <input type="number" class="step-price-input" placeholder="Preço (Opcional)">
-                        <button class="btn-primary btn-small" onclick="addStep(this)">Add Etapa</button>
-                    </div>
-
-                    <ul class="step-list">
-                        <!-- Etapas entram aqui -->
-                    </ul>
-                </div>
-            </div>
+            <!-- As metas geradas pelo Firebase vão aparecer aqui -->
+            <div id="goals-container"></div>
         </section>
 
         <!-- ABA 2: DEVEDORES -->
         <section id="devedores" class="tab-content">
             <div class="card">
-                <h2>Controle de Devedores 💸</h2>
+                <h2>Registrar Novo Empréstimo 💸</h2>
                 <div class="form-group grid-inputs">
                     <input type="text" id="debt-name" placeholder="Nome da pessoa">
                     <input type="number" id="debt-amount" placeholder="Valor emprestado">
-                    
-                    <div class="date-group">
-                        <label>Data de Empréstimo</label>
-                        <input type="date" id="debt-start">
-                    </div>
-                    <div class="date-group">
-                        <label>Data de Devolução</label>
-                        <input type="date" id="debt-end">
-                    </div>
-
+                    <div class="date-group"><label>Data de Empréstimo</label><input type="date" id="debt-start"></div>
+                    <div class="date-group"><label>Data de Devolução</label><input type="date" id="debt-end"></div>
                     <input type="number" id="debt-interest" placeholder="Juros em %">
-                    <input type="number" id="debt-total" placeholder="Total a devolver" readonly title="Calculado automaticamente">
-                    
-                    <button id="add-debt-btn" class="btn-secondary">Registrar Empréstimo</button>
+                    <input type="number" id="debt-total" placeholder="Total a devolver" readonly>
+                    <button id="add-debt-btn" class="btn-secondary">Salvar na Nuvem ☁️</button>
                 </div>
+            </div>
+            <div class="card">
+                <h2>Valores a Receber 📈</h2>
+                <ul id="debts-list-container" class="debt-list">A carregar dados...</ul>
             </div>
         </section>
     </main>
 
-    <script>
-        /* ==============================
-           LÓGICA (JAVASCRIPT)
-        ============================== */
+    <script type="module">
+        // 1. IMPORTAÇÕES DO FIREBASE
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // 1. Lógica das Abas
+        // 2. CONFIGURAÇÃO (Chaves do Josemar)
+        const firebaseConfig = {
+            apiKey: "AIzaSyA7tO0E3nRuDZnZ138ZGCYwxOjuZKpTMWg",
+            authDomain: "so-vitorias.firebaseapp.com",
+            projectId: "so-vitorias",
+            storageBucket: "so-vitorias.firebasestorage.app",
+            messagingSenderId: "971516614367",
+            appId: "1:971516614367:web:5ba14a688e4d4137923b5a"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // --- FUNÇÕES GERAIS ---
+        function formatMoney(value) {
+            const currency = document.getElementById('global-currency').value;
+            if (!value) return '';
+            return currency === 'AOA' ? `Kz ${parseFloat(value).toLocaleString('pt-AO', { minimumFractionDigits: 2 })}` 
+                                      : `R$ ${parseFloat(value).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
+        }
+
+        // Lógica das Abas
+        document.getElementById('btn-tab-metas').addEventListener('click', (e) => showTab('metas', e));
+        document.getElementById('btn-tab-devedores').addEventListener('click', (e) => showTab('devedores', e));
         function showTab(tabId, event) {
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active-tab'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(tabId).classList.add('active-tab');
-            if(event) event.currentTarget.classList.add('active');
+            event.currentTarget.classList.add('active');
         }
 
-        // 2. Formatação de Moeda
-        function formatMoney(value) {
-            const currency = document.getElementById('global-currency').value;
-            if (!value) return '';
+        // ==========================================
+        // MÓDULO 1: METAS E ETAPAS (NOVIDADE!)
+        // ==========================================
+        
+        // Criar nova Meta
+        document.getElementById('btn-create-meta').addEventListener('click', async () => {
+            const nameInput = document.getElementById('main-goal-name');
+            if(!nameInput.value.trim()) return alert("Dê um nome para a meta!");
             
-            if (currency === 'AOA') {
-                return `Kz ${parseFloat(value).toLocaleString('pt-AO', { minimumFractionDigits: 2 })}`;
-            } else {
-                return `R$ ${parseFloat(value).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
-            }
-        }
+            try {
+                await addDoc(collection(db, "metas"), {
+                    nome: nameInput.value,
+                    etapas: [] // Começa sem etapas
+                });
+                nameInput.value = '';
+            } catch(e) { console.error("Erro ao criar meta:", e); }
+        });
 
-        // 3. Criar Nova Meta
-        function createGoal() {
-            const goalNameInput = document.getElementById('main-goal-name');
-            if (!goalNameInput.value.trim()) return alert("Dê um nome para a meta!");
+        // Ouvir as Metas em tempo real para montar a tela
+        const goalsContainer = document.getElementById('goals-container');
+        onSnapshot(collection(db, "metas"), (snapshot) => {
+            goalsContainer.innerHTML = '';
+            snapshot.forEach((docSnap) => {
+                const data = docSnap.data();
+                const docId = docSnap.id;
+                const etapas = data.etapas || [];
+                
+                // Cálculo da porcentagem
+                const totalSteps = etapas.length;
+                const checkedSteps = etapas.filter(e => e.concluido).length;
+                const percentage = totalSteps > 0 ? Math.round((checkedSteps / totalSteps) * 100) : 0;
 
-            const container = document.getElementById('goals-container');
-            const newCard = document.createElement('div');
-            newCard.className = 'card goal-card';
-            
-            newCard.innerHTML = `
-                <div class="goal-header">
-                    <div class="goal-title-area">
-                        <h2>🎯 ${goalNameInput.value}</h2>
-                        <button class="btn-delete" onclick="deleteGoal(this)" title="Apagar Meta">🗑️</button>
+                // Montar lista de etapas (HTML)
+                let stepsHTML = '';
+                etapas.forEach(etapa => {
+                    const priceText = etapa.price ? formatMoney(etapa.price) : '';
+                    const isChecked = etapa.concluido ? 'checked' : '';
+                    const isCompletedClass = etapa.concluido ? 'completed' : '';
+                    
+                    stepsHTML += `
+                        <li class="step-item ${isCompletedClass}">
+                            <label>
+                                <input type="checkbox" class="step-checkbox" data-docid="${docId}" data-stepid="${etapa.id}" ${isChecked}> 
+                                ${etapa.desc}
+                            </label>
+                            <span class="step-price">${priceText}</span>
+                        </li>
+                    `;
+                });
+
+                // Criar o Cartão da Meta
+                const card = document.createElement('div');
+                card.className = 'card goal-card';
+                card.innerHTML = `
+                    <div class="goal-header">
+                        <div class="goal-title-area">
+                            <h2>🎯 ${data.nome}</h2>
+                            <button class="btn-delete btn-delete-meta" data-id="${docId}" title="Apagar Meta">🗑️</button>
+                        </div>
+                        <span class="progress-text">${percentage}% Concluído</span>
                     </div>
-                    <span class="progress-text">0% Concluído</span>
-                </div>
-                <div class="progress-bar"><div class="progress-fill"></div></div>
-                <div class="form-group row-inputs step-input-group">
-                    <input type="text" class="step-desc" placeholder="Nova etapa...">
-                    <input type="number" class="step-price-input" placeholder="Preço (Opcional)">
-                    <button class="btn-primary btn-small" onclick="addStep(this)">Add Etapa</button>
-                </div>
-                <ul class="step-list"></ul>
-            `;
-            
-            container.insertBefore(newCard, container.firstChild);
-            goalNameInput.value = ''; // Limpa o campo
-        }
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${percentage}%;"></div>
+                    </div>
+                    <div class="form-group row-inputs step-input-group">
+                        <input type="text" class="step-desc" placeholder="Nova etapa (Ex: Comprar malas)">
+                        <input type="number" class="step-price-input" placeholder="Preço (Opcional)">
+                        <button class="btn-primary btn-small btn-add-step" data-id="${docId}">Add Etapa</button>
+                    </div>
+                    <ul class="step-list">${stepsHTML}</ul>
+                `;
+                goalsContainer.appendChild(card);
+            });
+        });
 
-        // 4. Apagar Meta
-        function deleteGoal(btn) {
-            if(confirm("Tem certeza que deseja apagar esta meta inteira?")) {
-                const card = btn.closest('.goal-card');
-                card.remove();
+        // Interações dentro do cartão de Metas (Adicionar Etapa e Apagar Meta)
+        goalsContainer.addEventListener('click', async (e) => {
+            // Apagar Meta
+            if(e.target.classList.contains('btn-delete-meta')) {
+                if(confirm("Tem certeza que deseja apagar esta meta inteira?")) {
+                    await deleteDoc(doc(db, "metas", e.target.dataset.id));
+                }
             }
-        }
+            // Adicionar Etapa
+            if(e.target.classList.contains('btn-add-step')) {
+                const docId = e.target.dataset.id;
+                const card = e.target.closest('.goal-card');
+                const desc = card.querySelector('.step-desc').value;
+                const price = card.querySelector('.step-price-input').value;
+                
+                if(!desc) return alert("Descreva a etapa!");
 
-        // 5. Adicionar Etapa dentro de uma Meta
-        function addStep(btn) {
-            const card = btn.closest('.goal-card');
-            const descInput = card.querySelector('.step-desc');
-            const priceInput = card.querySelector('.step-price-input');
-            const list = card.querySelector('.step-list');
-
-            if (!descInput.value.trim()) return alert("Descreva a etapa!");
-
-            const priceText = priceInput.value ? formatMoney(priceInput.value) : '';
-            
-            const li = document.createElement('li');
-            li.className = 'step-item';
-            li.innerHTML = `
-                <label>
-                    <input type="checkbox" onchange="updateProgress(this)"> ${descInput.value}
-                </label>
-                <span class="step-price">${priceText}</span>
-            `;
-
-            list.appendChild(li);
-            
-            // Limpa os campos após adicionar
-            descInput.value = '';
-            priceInput.value = '';
-            
-            // Atualiza a barra de progresso
-            updateProgress(li.querySelector('input'));
-        }
-
-        // 6. Atualizar Barra de Progresso
-        function updateProgress(checkbox) {
-            const card = checkbox.closest('.goal-card');
-            const listItem = checkbox.closest('.step-item');
-            
-            // Estilo visual da etapa concluída
-            if(checkbox.checked) {
-                listItem.classList.add('completed');
-            } else {
-                listItem.classList.remove('completed');
+                const docRef = doc(db, "metas", docId);
+                const docSnap = await getDoc(docRef);
+                const etapas = docSnap.data().etapas || [];
+                
+                // Adiciona a nova etapa na lista e atualiza o Firebase
+                etapas.push({ id: Date.now().toString(), desc: desc, price: price, concluido: false });
+                await updateDoc(docRef, { etapas: etapas });
             }
+        });
 
-            // Cálculo da porcentagem
-            const totalSteps = card.querySelectorAll('input[type="checkbox"]').length;
-            const checkedSteps = card.querySelectorAll('input[type="checkbox"]:checked').length;
-            
-            let percentage = 0;
-            if (totalSteps > 0) {
-                percentage = Math.round((checkedSteps / totalSteps) * 100);
+        // Marcar/Desmarcar Checkbox de Etapa
+        goalsContainer.addEventListener('change', async (e) => {
+            if(e.target.classList.contains('step-checkbox')) {
+                const docId = e.target.dataset.docid;
+                const stepId = e.target.dataset.stepid;
+                const isChecked = e.target.checked;
+
+                const docRef = doc(db, "metas", docId);
+                const docSnap = await getDoc(docRef);
+                let etapas = docSnap.data().etapas || [];
+                
+                // Encontra a etapa clicada e atualiza o estado
+                const stepIndex = etapas.findIndex(et => et.id === stepId);
+                if(stepIndex > -1) {
+                    etapas[stepIndex].concluido = isChecked;
+                    await updateDoc(docRef, { etapas: etapas });
+                }
             }
+        });
 
-            card.querySelector('.progress-fill').style.width = percentage + '%';
-            card.querySelector('.progress-text').innerText = percentage + '% Concluído';
-        }
-
-        // 7. Cálculo de Juros dos Devedores (Mantido)
+        // ==========================================
+        // MÓDULO 2: DEVEDORES
+        // ==========================================
         const amountInput = document.getElementById('debt-amount');
         const interestInput = document.getElementById('debt-interest');
         const totalInput = document.getElementById('debt-total');
@@ -402,15 +325,70 @@
             const amount = parseFloat(amountInput.value) || 0;
             const interestRate = parseFloat(interestInput.value) || 0;
             if (amount > 0) {
-                const total = amount + (amount * (interestRate / 100));
-                totalInput.value = total.toFixed(2);
+                totalInput.value = (amount + (amount * (interestRate / 100))).toFixed(2);
             } else {
                 totalInput.value = '';
             }
         }
-
         amountInput.addEventListener('input', calculateTotal);
         interestInput.addEventListener('input', calculateTotal);
+
+        // Salvar Devedor
+        document.getElementById('add-debt-btn').addEventListener('click', async () => {
+            const name = document.getElementById('debt-name').value;
+            const amount = document.getElementById('debt-amount').value;
+            const start = document.getElementById('debt-start').value;
+            const end = document.getElementById('debt-end').value;
+            const interest = document.getElementById('debt-interest').value;
+            
+            if(!name || !amount) return alert("Preenche pelo menos o nome e o valor!");
+
+            await addDoc(collection(db, "devedores"), {
+                nome: name, valor: amount, dataInicio: start, dataFim: end,
+                juros: interest, totalDevedor: totalInput.value
+            });
+            
+            // Limpa os campos
+            document.getElementById('debt-name').value = '';
+            document.getElementById('debt-amount').value = '';
+            document.getElementById('debt-start').value = '';
+            document.getElementById('debt-end').value = '';
+            document.getElementById('debt-interest').value = '';
+            totalInput.value = '';
+        });
+
+        // Ouvir Devedores
+        const debtsListContainer = document.getElementById('debts-list-container');
+        onSnapshot(collection(db, "devedores"), (snapshot) => {
+            debtsListContainer.innerHTML = '';
+            if(snapshot.empty) { debtsListContainer.innerHTML = '<p>Nenhum devedor registado. 💸</p>'; return; }
+
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                const currency = document.getElementById('global-currency').value;
+                const symbol = currency === 'AOA' ? 'Kz' : 'R$';
+                
+                const li = document.createElement('li');
+                li.className = 'debt-item';
+                li.innerHTML = `
+                    <div class="debt-info">
+                        <h3>👤 ${data.nome}</h3>
+                        <p><strong>Emprestado:</strong> ${symbol} ${data.valor}</p>
+                        <p><strong>Prazo:</strong> ${data.dataFim || 'Sem data'}</p>
+                        <p><strong>Juros:</strong> ${data.juros || 0}%</p>
+                    </div>
+                    <div class="debt-total-display">Total: ${symbol} ${data.totalDevedor || data.valor}</div>
+                `;
+                debtsListContainer.appendChild(li);
+            });
+        });
+
+        // Atualizar moedas quando trocar no menu
+        document.getElementById('global-currency').addEventListener('change', () => {
+            // Força a atualização visual recarregando os dados (simples truque disparando um pequeno evento nas views)
+            // No modo real, as snapshots acima cuidam disso sozinhas na próxima alteração
+            alert("Moeda alterada! As visualizações de preço serão atualizadas ao adicionar novos itens ou recarregar a página.");
+        });
 
     </script>
 </body>
