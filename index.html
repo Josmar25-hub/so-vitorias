@@ -18,22 +18,35 @@
             --texto: #333333;
         }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--fundo); color: var(--texto); margin: 0; padding: 0; }
-        header { background-color: var(--azul-confianca); color: white; text-align: center; padding: 2rem 1rem; border-bottom: 5px solid var(--amarelo-felicidade); }
-        header h1 { margin: 0; font-size: 2.5rem; }
         
+        /* TELA DE AUTENTICAÇÃO */
+        #auth-screen { display: flex; justify-content: center; align-items: center; min-height: 100vh; background: linear-gradient(135deg, var(--azul-confianca) 0%, var(--amarelo-felicidade) 100%); padding: 1rem; }
+        .auth-card { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); width: 100%; max-width: 400px; text-align: center; }
+        .auth-card h1 { color: var(--azul-confianca); margin-top: 0; }
+        .auth-card input { margin-bottom: 1rem; width: 100%; padding: 0.8rem; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+        .auth-card button { width: 100%; margin-bottom: 1rem; }
+        .toggle-auth { color: var(--azul-confianca); cursor: pointer; font-size: 0.9rem; text-decoration: underline; }
+        
+        /* APLICAÇÃO PRINCIPAL (Escondida inicialmente) */
+        #app-screen { display: none; }
+        
+        header { background-color: var(--azul-confianca); color: white; text-align: center; padding: 2rem 1rem; border-bottom: 5px solid var(--amarelo-felicidade); position: relative; }
+        header h1 { margin: 0; font-size: 2.5rem; }
+        .header-controls { position: absolute; top: 1rem; right: 1rem; display: flex; gap: 10px; align-items: center; }
+        .user-greeting { font-weight: bold; font-size: 0.9rem; }
+        .btn-logout { background: transparent; border: 1px solid white; color: white; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; cursor: pointer; }
+        .btn-logout:hover { background: white; color: var(--azul-confianca); }
+
         .currency-selector { margin-top: 1rem; display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 15px; font-weight: bold; background: rgba(0,0,0,0.1); padding: 10px; border-radius: 8px; max-width: 600px; margin-left: auto; margin-right: auto; }
         .currency-selector select, .currency-selector input { padding: 0.4rem 0.8rem; border-radius: 20px; border: 2px solid white; background: rgba(255, 255, 255, 0.2); color: white; font-weight: bold; outline: none; }
         .currency-selector select option { color: black; }
-        .currency-selector input::placeholder { color: rgba(255,255,255,0.7); }
 
-        /* Abas */
         .tabs { display: flex; justify-content: center; flex-wrap: wrap; gap: 1rem; margin-top: 1.5rem; }
         .tab-btn { background-color: transparent; color: white; border: 2px solid white; border-radius: 20px; padding: 0.5rem 1.5rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; }
         .tab-btn.active { background-color: var(--amarelo-felicidade); color: #000; border-color: var(--amarelo-felicidade); }
         .tab-content { display: none; }
         .active-tab { display: block; }
 
-        /* Cartões */
         main { max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
         .card { background: white; border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-top: 4px solid var(--amarelo-felicidade); }
         h2 { color: var(--azul-confianca); margin-top: 0; display: flex; justify-content: space-between; align-items: center; }
@@ -43,6 +56,7 @@
         .row-inputs input { flex: 1; min-width: 150px; }
         .grid-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
         .date-group { display: flex; flex-direction: column; font-size: 0.9rem; color: #555; }
+        
         button { padding: 0.8rem 1.5rem; border: none; border-radius: 6px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: transform 0.2s; }
         button:active { transform: scale(0.98); }
         .btn-primary { background-color: var(--amarelo-felicidade); color: #000; }
@@ -63,14 +77,12 @@
         .step-price { font-weight: bold; color: #555; }
         .btn-small { padding: 0.5rem 1rem; font-size: 0.9rem; }
 
-        /* Devedores */
+        /* Devedores e Fichas */
         .debt-list { list-style: none; padding: 0; margin-top: 1rem; }
         .debt-item { background: var(--fundo); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid var(--azul-confianca); display: flex; justify-content: space-between; align-items: center; }
         .debt-info h3 { margin: 0 0 0.5rem 0; color: var(--azul-confianca); font-size: 1.1rem; }
         .debt-info p { margin: 0; font-size: 0.9rem; color: #555; }
         .debt-total-display { font-size: 1.2rem; font-weight: bold; color: #000; display: flex; align-items: center; gap: 10px; }
-
-        /* Fichas Isoladas */
         .person-card { background: var(--fundo); padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem; border: 2px solid var(--azul-claro); }
         .person-card h3 { margin-top: 0; color: var(--azul-confianca); border-bottom: 2px solid var(--amarelo-felicidade); padding-bottom: 0.5rem; }
         .person-total { font-size: 1.3rem; font-weight: bold; color: #28a745; margin-top: 1rem; text-align: right; }
@@ -84,7 +96,6 @@
         .msg-kiriana { align-self: flex-start; background-color: var(--amarelo-felicidade); color: #000; border-bottom-left-radius: 2px; }
         .msg-sender { font-size: 0.75rem; font-weight: bold; margin-bottom: 4px; opacity: 0.8; display: flex; justify-content: space-between; }
         .chat-controls { display: flex; gap: 10px; align-items: stretch; }
-        .chat-controls select { padding: 0.8rem; border: 1px solid #ccc; border-radius: 6px; font-weight: bold; background: white; cursor: pointer; }
         .chat-controls input { flex: 1; }
         .btn-del-msg { background: transparent; border: none; color: inherit; opacity: 0.6; cursor: pointer; font-size: 0.8rem; }
         .btn-del-msg:hover { opacity: 1; }
@@ -92,105 +103,144 @@
 </head>
 <body>
 
-    <header>
-        <h1>Só vitorias 🎉</h1>
-        <p>O caminho para o nosso final feliz!</p>
-        
-        <!-- Controles de Moeda e Câmbio do Dia -->
-        <div class="currency-selector">
-            <div>
-                <label>Moeda Principal:</label>
-                <select id="global-currency">
-                    <option value="BRL">Real (R$)</option>
-                    <option value="AOA">Kwanza (Kz)</option>
-                </select>
-            </div>
-            <div>
-                <label>Câmbio do dia (1 R$ = ? Kz):</label>
-                <input type="number" id="daily-exchange-rate" value="170" style="width: 100px;">
-            </div>
+    <!-- ==========================================
+         TELA DE AUTENTICAÇÃO
+    ========================================== -->
+    <div id="auth-screen">
+        <!-- FORMULÁRIO DE LOGIN -->
+        <div class="auth-card" id="login-form">
+            <h1>Só vitorias 🎉</h1>
+            <p>Bem-vindo de volta! Faz login para aceder ao vosso painel.</p>
+            <input type="email" id="login-email" placeholder="O teu e-mail">
+            <input type="password" id="login-password" placeholder="Palavra-passe">
+            <button class="btn-primary" id="btn-login">Entrar</button>
+            <p class="toggle-auth" onclick="toggleAuthForms()">Ainda não tens conta? Regista-te aqui!</p>
         </div>
 
-        <div class="tabs">
-            <button class="tab-btn active" id="btn-tab-metas">Metas 🎯</button>
-            <button class="tab-btn" id="btn-tab-devedores">Devedores 💸</button>
-            <button class="tab-btn" id="btn-tab-fichas">Fichas 🗂️</button>
-            <button class="tab-btn" id="btn-tab-chat">Chat ❤️</button>
+        <!-- FORMULÁRIO DE REGISTO -->
+        <div class="auth-card" id="register-form" style="display: none;">
+            <h1>Criar Conta 💍</h1>
+            <p>Preenche os teus dados para começares a planear.</p>
+            <input type="text" id="reg-name" placeholder="O teu Nome">
+            <input type="text" id="reg-phone" placeholder="Número de Telefone">
+            <input type="email" id="reg-email" placeholder="E-mail">
+            <input type="password" id="reg-password" placeholder="Cria uma palavra-passe">
+            <button class="btn-primary" id="btn-register">Registar Conta</button>
+            <p class="toggle-auth" onclick="toggleAuthForms()">Já tens conta? Faz Login aqui!</p>
         </div>
-    </header>
+    </div>
 
-    <main>
-        <!-- ABA 1: METAS -->
-        <section id="metas" class="tab-content active-tab">
-            <div class="card add-meta-card">
-                <h2>Criar Nova Meta 🌟</h2>
-                <div class="form-group row-inputs">
-                    <input type="text" id="main-goal-name" placeholder="Ex: Viagem da Kiriana">
-                    <button class="btn-primary" id="btn-create-meta">Criar Meta</button>
-                </div>
+    <!-- ==========================================
+         APLICAÇÃO PRINCIPAL (PROTEGIDA)
+    ========================================== -->
+    <div id="app-screen">
+        <header>
+            <div class="header-controls">
+                <span class="user-greeting" id="display-user-name">Olá!</span>
+                <button class="btn-logout" id="btn-logout">Sair</button>
             </div>
-            <div id="goals-container"></div>
-        </section>
-
-        <!-- ABA 2: DEVEDORES (Adição e Lista Geral) -->
-        <section id="devedores" class="tab-content">
-            <div class="card">
-                <h2>Registrar Novo Empréstimo 💸</h2>
-                <p style="font-size: 0.9rem; color: #666;">Insere os valores sempre em Reais (R$). O sistema converte para Kz automaticamente se mudares a moeda acima.</p>
-                <div class="form-group grid-inputs">
-                    <input type="text" id="debt-name" placeholder="Nome da pessoa">
-                    <input type="number" id="debt-amount" placeholder="Valor (em R$)">
-                    <div class="date-group"><label>Data Empréstimo</label><input type="date" id="debt-start"></div>
-                    <div class="date-group"><label>Data Devolução</label><input type="date" id="debt-end"></div>
-                    <input type="number" id="debt-interest" placeholder="Juros %">
-                    <input type="number" id="debt-total" placeholder="Total a devolver (em R$)" readonly>
-                    <button id="add-debt-btn" class="btn-secondary">Salvar</button>
-                </div>
-            </div>
-            <div class="card">
-                <h2>
-                    Valores a Receber (Geral) 📈
-                </h2>
-                <ul id="debts-list-container" class="debt-list">A carregar dados...</ul>
-            </div>
-        </section>
-
-        <!-- ABA 3: FICHAS ISOLADAS (Novo!) -->
-        <section id="fichas" class="tab-content">
-            <div class="card">
-                <h2>Fichas de Devedores 🗂️</h2>
-                <p style="color:#555; margin-bottom: 1.5rem;">Aqui vês as dívidas agrupadas por pessoa para facilitar a cobrança!</p>
-                <div id="fichas-container">
-                    A carregar fichas...
-                </div>
-            </div>
-        </section>
-
-        <!-- ABA 4: CHAT PRIVADO -->
-        <section id="chat" class="tab-content">
-            <div class="card chat-container">
-                <h2>
-                    Mural do Casal 💬 
-                    <button id="btn-clear-chat" class="btn-clear-all">Limpar Chat 🧹</button>
-                </h2>
-                <div class="chat-window" id="chat-window">
-                    A carregar mensagens...
-                </div>
-                <div class="chat-controls">
-                    <select id="chat-user">
-                        <option value="Josemar">Josemar 👱🏾‍♂️</option>
-                        <option value="Kiriana">Kiriana 👩🏾‍🦱</option>
+            
+            <h1>Só vitorias 🎉</h1>
+            <p>O caminho para o nosso final feliz!</p>
+            
+            <div class="currency-selector">
+                <div>
+                    <label>Moeda Principal:</label>
+                    <select id="global-currency">
+                        <option value="BRL">Real (R$)</option>
+                        <option value="AOA">Kwanza (Kz)</option>
                     </select>
-                    <input type="text" id="chat-input" placeholder="Escreve uma mensagem..." autocomplete="off">
-                    <button id="btn-send-chat" class="btn-primary">Enviar</button>
+                </div>
+                <div>
+                    <label>Câmbio do dia (1 R$ = ? Kz):</label>
+                    <input type="number" id="daily-exchange-rate" value="170" style="width: 100px;">
                 </div>
             </div>
-        </section>
-    </main>
 
+            <div class="tabs">
+                <button class="tab-btn active" id="btn-tab-metas">Metas 🎯</button>
+                <button class="tab-btn" id="btn-tab-devedores">Devedores 💸</button>
+                <button class="tab-btn" id="btn-tab-fichas">Fichas 🗂️</button>
+                <button class="tab-btn" id="btn-tab-chat">Chat ❤️</button>
+            </div>
+        </header>
+
+        <main>
+            <!-- ABA 1: METAS -->
+            <section id="metas" class="tab-content active-tab">
+                <div class="card add-meta-card">
+                    <h2>Criar Nova Meta 🌟</h2>
+                    <div class="form-group row-inputs">
+                        <input type="text" id="main-goal-name" placeholder="Ex: Viagem da Kiriana">
+                        <button class="btn-primary" id="btn-create-meta">Criar Meta</button>
+                    </div>
+                </div>
+                <div id="goals-container"></div>
+            </section>
+
+            <!-- ABA 2: DEVEDORES -->
+            <section id="devedores" class="tab-content">
+                <div class="card">
+                    <h2>Registrar Novo Empréstimo 💸</h2>
+                    <div class="form-group grid-inputs">
+                        <input type="text" id="debt-name" placeholder="Nome da pessoa">
+                        <input type="number" id="debt-amount" placeholder="Valor (em R$)">
+                        <div class="date-group"><label>Data Empréstimo</label><input type="date" id="debt-start"></div>
+                        <div class="date-group"><label>Data Devolução</label><input type="date" id="debt-end"></div>
+                        <input type="number" id="debt-interest" placeholder="Juros %">
+                        <input type="number" id="debt-total" placeholder="Total a devolver (em R$)" readonly>
+                        <button id="add-debt-btn" class="btn-secondary">Salvar</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <h2>Valores a Receber (Geral) 📈</h2>
+                    <ul id="debts-list-container" class="debt-list"></ul>
+                </div>
+            </section>
+
+            <!-- ABA 3: FICHAS ISOLADAS -->
+            <section id="fichas" class="tab-content">
+                <div class="card">
+                    <h2>Fichas de Devedores 🗂️</h2>
+                    <div id="fichas-container"></div>
+                </div>
+            </section>
+
+            <!-- ABA 4: CHAT PRIVADO -->
+            <section id="chat" class="tab-content">
+                <div class="card chat-container">
+                    <h2>Mural do Casal 💬 <button id="btn-clear-chat" class="btn-clear-all">Limpar Chat 🧹</button></h2>
+                    <div class="chat-window" id="chat-window"></div>
+                    <div class="chat-controls">
+                        <input type="text" id="chat-input" placeholder="Escreve uma mensagem..." autocomplete="off">
+                        <button id="btn-send-chat" class="btn-primary">Enviar</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- SCRIPT DE TRANSIÇÃO VISUAL LOGIN/REGISTO -->
+    <script>
+        function toggleAuthForms() {
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+            if (loginForm.style.display === 'none') {
+                loginForm.style.display = 'block';
+                registerForm.style.display = 'none';
+            } else {
+                loginForm.style.display = 'none';
+                registerForm.style.display = 'block';
+            }
+        }
+    </script>
+
+    <!-- SCRIPT FIREBASE -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc, getDoc, getDocs, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc, getDoc, getDocs, query, orderBy, serverTimestamp, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        // NOVIDADE: Importações da Autenticação! 🔐
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, updateProfile, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyA7tO0E3nRuDZnZ138ZGCYwxOjuZKpTMWg",
@@ -203,295 +253,242 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-
-        // --- NAVEGAÇÃO ABAS ---
-        document.getElementById('btn-tab-metas').addEventListener('click', (e) => showTab('metas', e));
-        document.getElementById('btn-tab-devedores').addEventListener('click', (e) => showTab('devedores', e));
-        document.getElementById('btn-tab-fichas').addEventListener('click', (e) => showTab('fichas', e));
-        document.getElementById('btn-tab-chat').addEventListener('click', (e) => showTab('chat', e));
+        const auth = getAuth(app); // Inicializando a Segurança
         
-        function showTab(tabId, event) {
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active-tab'));
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active-tab');
-            event.currentTarget.classList.add('active');
-        }
+        let currentUserData = null; // Para guardar quem está logado no chat
 
-        // --- FUNÇÕES MOEDA & CÂMBIO ---
-        // A lógica assume que gravas tudo tendo o BRL como base. Se mudares para Kz, ele multiplica pela taxa.
-        function formatMoney(value) {
-            if (!value) return '';
-            const currency = document.getElementById('global-currency').value;
-            const rate = parseFloat(document.getElementById('daily-exchange-rate').value) || 1;
-            const numValue = parseFloat(value);
-            
-            if(currency === 'AOA') {
-                const converted = numValue * rate;
-                return `Kz ${converted.toLocaleString('pt-AO', { minimumFractionDigits: 2 })}`;
+        // ==========================================
+        // SISTEMA DE AUTENTICAÇÃO
+        // ==========================================
+        const authScreen = document.getElementById('auth-screen');
+        const appScreen = document.getElementById('app-screen');
+        const displayUserName = document.getElementById('display-user-name');
+
+        // Escutar mudanças de estado (se está logado ou não)
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // Utilizador Logado! Entra na app.
+                currentUserData = user;
+                displayUserName.innerText = `Olá, ${user.displayName || 'Parceiro'}!`;
+                authScreen.style.display = 'none';
+                appScreen.style.display = 'block';
+                carregarDadosDaApp(); // Chama a função que lê a base de dados
             } else {
-                return `R$ ${numValue.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
+                // Não logado. Volta para a tela de login.
+                currentUserData = null;
+                authScreen.style.display = 'flex';
+                appScreen.style.display = 'none';
             }
-        }
-        
-        // Atualizar as visualizações em tempo real ao mudar moeda ou taxa
-        document.getElementById('global-currency').addEventListener('change', reRenderAll);
-        document.getElementById('daily-exchange-rate').addEventListener('input', reRenderAll);
-
-        // Função auxiliar para forçar o re-render (pequeno truque visual)
-        function reRenderAll() {
-            // Um pequeno truque para re-renderizar é despachar um evento, 
-            // mas como o Firebase é reativo, podemos apenas avisar o utilizador por agora.
-            // Para ser automático na mesma sessão, teríamos de reconstruir as listas.
-            // No caso deste código, as funções de snapshot cuidam dos dados, mas recarregar é mais simples.
-        }
-
-        // ==========================================
-        // MÓDULO 1: METAS
-        // ==========================================
-        document.getElementById('btn-create-meta').addEventListener('click', async () => {
-            const nameInput = document.getElementById('main-goal-name');
-            if(!nameInput.value.trim()) return alert("Dê um nome para a meta!");
-            await addDoc(collection(db, "metas"), { nome: nameInput.value, etapas: [] });
-            nameInput.value = '';
         });
 
-        const goalsContainer = document.getElementById('goals-container');
-        onSnapshot(collection(db, "metas"), (snapshot) => {
-            goalsContainer.innerHTML = '';
-            snapshot.forEach((docSnap) => {
-                const data = docSnap.data();
-                const docId = docSnap.id;
-                const etapas = data.etapas || [];
+        // REGISTO
+        document.getElementById('btn-register').addEventListener('click', async () => {
+            const nome = document.getElementById('reg-name').value;
+            const telefone = document.getElementById('reg-phone').value;
+            const email = document.getElementById('reg-email').value;
+            const password = document.getElementById('reg-password').value;
+
+            if(!nome || !telefone || !email || !password) return alert("Preenche todos os campos!");
+
+            try {
+                // 1. Cria a conta no sistema de segurança
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 
-                const totalSteps = etapas.length;
-                const checkedSteps = etapas.filter(e => e.concluido).length;
-                const percentage = totalSteps > 0 ? Math.round((checkedSteps / totalSteps) * 100) : 0;
-
-                let stepsHTML = '';
-                etapas.forEach(etapa => {
-                    const priceText = etapa.price ? formatMoney(etapa.price) : '';
-                    const isChecked = etapa.concluido ? 'checked' : '';
-                    const isCompletedClass = etapa.concluido ? 'completed' : '';
-                    stepsHTML += `
-                        <li class="step-item ${isCompletedClass}">
-                            <label><input type="checkbox" class="step-checkbox" data-docid="${docId}" data-stepid="${etapa.id}" ${isChecked}> ${etapa.desc}</label>
-                            <span class="step-price">${priceText}</span>
-                        </li>`;
+                // 2. Atualiza o perfil para guardar o Nome (Útil para o Chat!)
+                await updateProfile(userCredential.user, { displayName: nome });
+                
+                // 3. Salva os dados extras (Telefone) numa tabela de "usuarios"
+                await setDoc(doc(db, "usuarios", userCredential.user.uid), {
+                    nome: nome,
+                    telefone: telefone,
+                    email: email,
+                    dataRegisto: serverTimestamp()
                 });
+                
+                alert("Conta criada com sucesso!");
+            } catch (error) {
+                alert("Erro ao criar conta: " + error.message);
+            }
+        });
 
-                const card = document.createElement('div');
-                card.className = 'card goal-card';
-                card.innerHTML = `
-                    <div class="goal-header">
-                        <div class="goal-title-area"><h2>🎯 ${data.nome}</h2><button class="btn-delete btn-delete-meta" data-id="${docId}">🗑</button></div>
-                        <span class="progress-text">${percentage}%</span>
-                    </div>
-                    <div class="progress-bar"><div class="progress-fill" style="width: ${percentage}%;"></div></div>
-                    <div class="form-group row-inputs step-input-group">
-                        <input type="text" class="step-desc" placeholder="Nova etapa...">
-                        <input type="number" class="step-price-input" placeholder="Preço (Opcional)">
-                        <button class="btn-primary btn-small btn-add-step" data-id="${docId}">Add Etapa</button>
-                    </div>
-                    <ul class="step-list">${stepsHTML}</ul>
-                `;
-                goalsContainer.appendChild(card);
+        // LOGIN
+        document.getElementById('btn-login').addEventListener('click', async () => {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+            } catch (error) {
+                alert("Erro no Login. Verifica os dados! " + error.message);
+            }
+        });
+
+        // LOGOUT
+        document.getElementById('btn-logout').addEventListener('click', () => {
+            signOut(auth);
+        });
+
+
+        // ==========================================
+        // RESTANTE DA APLICAÇÃO (Envolvida numa função)
+        // ==========================================
+        function carregarDadosDaApp() {
+            
+            // Navegação Abas
+            document.getElementById('btn-tab-metas').addEventListener('click', (e) => showTab('metas', e));
+            document.getElementById('btn-tab-devedores').addEventListener('click', (e) => showTab('devedores', e));
+            document.getElementById('btn-tab-fichas').addEventListener('click', (e) => showTab('fichas', e));
+            document.getElementById('btn-tab-chat').addEventListener('click', (e) => showTab('chat', e));
+            function showTab(tabId, event) {
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active-tab'));
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.getElementById(tabId).classList.add('active-tab');
+                event.currentTarget.classList.add('active');
+            }
+
+            // Moeda & Câmbio
+            function formatMoney(value) {
+                if (!value) return '';
+                const currency = document.getElementById('global-currency').value;
+                const rate = parseFloat(document.getElementById('daily-exchange-rate').value) || 1;
+                const numValue = parseFloat(value);
+                if(currency === 'AOA') return `Kz ${(numValue * rate).toLocaleString('pt-AO', { minimumFractionDigits: 2 })}`;
+                else return `R$ ${numValue.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
+            }
+
+            // Metas
+            document.getElementById('btn-create-meta').onclick = async () => {
+                const name = document.getElementById('main-goal-name');
+                if(!name.value.trim()) return;
+                await addDoc(collection(db, "metas"), { nome: name.value, etapas: [] });
+                name.value = '';
+            };
+
+            onSnapshot(collection(db, "metas"), (snapshot) => {
+                const goalsContainer = document.getElementById('goals-container');
+                goalsContainer.innerHTML = '';
+                snapshot.forEach((docSnap) => {
+                    const data = docSnap.data(); const docId = docSnap.id; const etapas = data.etapas || [];
+                    const percentage = etapas.length > 0 ? Math.round((etapas.filter(e => e.concluido).length / etapas.length) * 100) : 0;
+                    
+                    let stepsHTML = '';
+                    etapas.forEach(etapa => {
+                        stepsHTML += `<li class="step-item ${etapa.concluido ? 'completed' : ''}">
+                            <label><input type="checkbox" class="step-checkbox" data-docid="${docId}" data-stepid="${etapa.id}" ${etapa.concluido ? 'checked' : ''}> ${etapa.desc}</label>
+                            <span class="step-price">${etapa.price ? formatMoney(etapa.price) : ''}</span></li>`;
+                    });
+
+                    goalsContainer.innerHTML += `
+                        <div class="card goal-card">
+                            <div class="goal-header"><h2>🎯 ${data.nome}</h2><button class="btn-delete btn-delete-meta" data-id="${docId}">🗑</button></div>
+                            <span class="progress-text">${percentage}%</span>
+                            <div class="progress-bar"><div class="progress-fill" style="width: ${percentage}%;"></div></div>
+                            <div class="form-group row-inputs">
+                                <input type="text" class="step-desc" placeholder="Nova etapa...">
+                                <input type="number" class="step-price-input" placeholder="Preço">
+                                <button class="btn-primary btn-small btn-add-step" data-id="${docId}">Add Etapa</button>
+                            </div>
+                            <ul class="step-list">${stepsHTML}</ul>
+                        </div>`;
+                });
             });
-        });
 
-        goalsContainer.addEventListener('click', async (e) => {
-            if(e.target.classList.contains('btn-delete-meta')) {
-                if(confirm("Apagar meta?")) await deleteDoc(doc(db, "metas", e.target.dataset.id));
-            }
-            if(e.target.classList.contains('btn-add-step')) {
-                const docId = e.target.dataset.id;
-                const card = e.target.closest('.goal-card');
-                const desc = card.querySelector('.step-desc').value;
-                const price = card.querySelector('.step-price-input').value;
-                if(!desc) return;
-                const docRef = doc(db, "metas", docId);
-                const docSnap = await getDoc(docRef);
-                const etapas = docSnap.data().etapas || [];
-                etapas.push({ id: Date.now().toString(), desc, price, concluido: false });
-                await updateDoc(docRef, { etapas });
-            }
-        });
-
-        goalsContainer.addEventListener('change', async (e) => {
-            if(e.target.classList.contains('step-checkbox')) {
-                const docRef = doc(db, "metas", e.target.dataset.docid);
-                const docSnap = await getDoc(docRef);
-                let etapas = docSnap.data().etapas || [];
-                const stepIndex = etapas.findIndex(et => et.id === e.target.dataset.stepid);
-                if(stepIndex > -1) {
-                    etapas[stepIndex].concluido = e.target.checked;
+            document.getElementById('goals-container').onclick = async (e) => {
+                if(e.target.classList.contains('btn-delete-meta')) if(confirm("Apagar meta?")) await deleteDoc(doc(db, "metas", e.target.dataset.id));
+                if(e.target.classList.contains('btn-add-step')) {
+                    const card = e.target.closest('.goal-card');
+                    const desc = card.querySelector('.step-desc').value;
+                    const price = card.querySelector('.step-price-input').value;
+                    if(!desc) return;
+                    const docRef = doc(db, "metas", e.target.dataset.id);
+                    const etapas = (await getDoc(docRef)).data().etapas || [];
+                    etapas.push({ id: Date.now().toString(), desc, price, concluido: false });
                     await updateDoc(docRef, { etapas });
                 }
-            }
-        });
+            };
 
-        // ==========================================
-        // MÓDULO 2 & 3: DEVEDORES E FICHAS
-        // ==========================================
-        const amountInput = document.getElementById('debt-amount');
-        const interestInput = document.getElementById('debt-interest');
-        const totalInput = document.getElementById('debt-total');
-
-        function calculateTotal() {
-            const amount = parseFloat(amountInput.value) || 0;
-            const interest = parseFloat(interestInput.value) || 0;
-            totalInput.value = amount > 0 ? (amount + (amount * (interest / 100))).toFixed(2) : '';
-        }
-        amountInput.addEventListener('input', calculateTotal);
-        interestInput.addEventListener('input', calculateTotal);
-
-        document.getElementById('add-debt-btn').addEventListener('click', async () => {
-            const name = document.getElementById('debt-name').value;
-            const amount = document.getElementById('debt-amount').value;
-            if(!name || !amount) return alert("Preencha nome e valor!");
-            await addDoc(collection(db, "devedores"), {
-                nome: name, valor: amount, dataInicio: document.getElementById('debt-start').value, 
-                dataFim: document.getElementById('debt-end').value, juros: document.getElementById('debt-interest').value, 
-                totalDevedor: totalInput.value,
-                dataAdicao: serverTimestamp()
-            });
-            document.querySelectorAll('#devedores input:not([type="button"])').forEach(i => i.value = '');
-        });
-
-        const debtsListContainer = document.getElementById('debts-list-container');
-        const fichasContainer = document.getElementById('fichas-container');
-        
-        onSnapshot(query(collection(db, "devedores"), orderBy("dataAdicao", "asc")), (snapshot) => {
-            debtsListContainer.innerHTML = '';
-            fichasContainer.innerHTML = '';
-            
-            if(snapshot.empty) { 
-                debtsListContainer.innerHTML = '<p>Nenhum devedor registado.</p>'; 
-                fichasContainer.innerHTML = '<p>Nenhuma ficha disponível.</p>';
-                return; 
-            }
-
-            const agrupadosPorPessoa = {};
-
-            snapshot.forEach((docSnap) => {
-                const data = docSnap.data();
-                const docId = docSnap.id;
-                
-                // 1. Renderizar Lista Geral (Aba Devedores)
-                const li = document.createElement('li');
-                li.className = 'debt-item';
-                li.innerHTML = `
-                    <div class="debt-info">
-                        <h3>👤 ${data.nome}</h3>
-                        <p><strong>Emprestado:</strong> ${formatMoney(data.valor)} | <strong>Prazo:</strong> ${data.dataFim || 'N/A'}</p>
-                    </div>
-                    <div class="debt-total-display">
-                        Total: ${formatMoney(data.totalDevedor || data.valor)}
-                        <button class="btn-delete btn-del-debt" data-id="${docId}" title="Apagar Dívida">🗑️</button>
-                    </div>
-                `;
-                debtsListContainer.appendChild(li);
-
-                // 2. Agrupar dados para a Aba de Fichas Isoladas
-                const nomeNormalizado = data.nome.trim().toUpperCase();
-                if(!agrupadosPorPessoa[nomeNormalizado]) {
-                    agrupadosPorPessoa[nomeNormalizado] = { nome: data.nome, dividas: [], somaTotal: 0 };
+            document.getElementById('goals-container').onchange = async (e) => {
+                if(e.target.classList.contains('step-checkbox')) {
+                    const docRef = doc(db, "metas", e.target.dataset.docid);
+                    let etapas = (await getDoc(docRef)).data().etapas || [];
+                    const index = etapas.findIndex(et => et.id === e.target.dataset.stepid);
+                    if(index > -1) { etapas[index].concluido = e.target.checked; await updateDoc(docRef, { etapas }); }
                 }
-                agrupadosPorPessoa[nomeNormalizado].dividas.push(data);
-                agrupadosPorPessoa[nomeNormalizado].somaTotal += parseFloat(data.totalDevedor || data.valor);
-            });
+            };
 
-            // Renderizar Aba Fichas Isoladas
-            for(const pessoa in agrupadosPorPessoa) {
-                const p = agrupadosPorPessoa[pessoa];
-                let htmlDividas = '';
-                p.dividas.forEach(d => {
-                    htmlDividas += `<div class="mini-debt">Data Fim: ${d.dataFim || '-'} | Juros: ${d.juros||0}% | <strong>Valor: ${formatMoney(d.totalDevedor || d.valor)}</strong></div>`;
+            // Devedores e Fichas
+            document.getElementById('add-debt-btn').onclick = async () => {
+                const total = document.getElementById('debt-total').value;
+                await addDoc(collection(db, "devedores"), {
+                    nome: document.getElementById('debt-name').value, valor: document.getElementById('debt-amount').value, 
+                    dataFim: document.getElementById('debt-end').value, juros: document.getElementById('debt-interest').value, 
+                    totalDevedor: total, dataAdicao: serverTimestamp()
                 });
-                
-                const card = document.createElement('div');
-                card.className = 'person-card';
-                card.innerHTML = `
-                    <h3>👤 Ficha: ${p.nome}</h3>
-                    ${htmlDividas}
-                    <div class="person-total">Total Acumulado: ${formatMoney(p.somaTotal)}</div>
-                `;
-                fichasContainer.appendChild(card);
-            }
-        });
+            };
 
-        // Apagar dívida individual
-        debtsListContainer.addEventListener('click', async (e) => {
-            if(e.target.classList.contains('btn-del-debt')) {
-                if(confirm("Apagar este registo de dívida?")) {
-                    await deleteDoc(doc(db, "devedores", e.target.dataset.id));
+            onSnapshot(query(collection(db, "devedores"), orderBy("dataAdicao", "asc")), (snapshot) => {
+                const debtsListContainer = document.getElementById('debts-list-container');
+                const fichasContainer = document.getElementById('fichas-container');
+                debtsListContainer.innerHTML = ''; fichasContainer.innerHTML = '';
+                const agrupados = {};
+
+                snapshot.forEach((docSnap) => {
+                    const data = docSnap.data(); const docId = docSnap.id;
+                    debtsListContainer.innerHTML += `<li class="debt-item"><div class="debt-info"><h3>👤 ${data.nome}</h3><p>Emprestado: ${formatMoney(data.valor)}</p></div><div class="debt-total-display">Total: ${formatMoney(data.totalDevedor || data.valor)} <button class="btn-delete btn-del-debt" data-id="${docId}">🗑️</button></div></li>`;
+                    
+                    const n = data.nome.trim().toUpperCase();
+                    if(!agrupados[n]) agrupados[n] = { nome: data.nome, dividas: [], soma: 0 };
+                    agrupados[n].dividas.push(data);
+                    agrupados[n].soma += parseFloat(data.totalDevedor || data.valor);
+                });
+
+                for(const pessoa in agrupados) {
+                    const p = agrupados[pessoa];
+                    let htmlDividas = '';
+                    p.dividas.forEach(d => htmlDividas += `<div class="mini-debt">Fim: ${d.dataFim||'-'} | Juros: ${d.juros||0}% | <strong>Valor: ${formatMoney(d.totalDevedor || d.valor)}</strong></div>`);
+                    fichasContainer.innerHTML += `<div class="person-card"><h3>👤 Ficha: ${p.nome}</h3>${htmlDividas}<div class="person-total">Total: ${formatMoney(p.soma)}</div></div>`;
                 }
-            }
-        });
-
-        // ==========================================
-        // MÓDULO 4: CHAT PRIVADO
-        // ==========================================
-        const chatWindow = document.getElementById('chat-window');
-        const chatInput = document.getElementById('chat-input');
-        const chatUser = document.getElementById('chat-user');
-        const btnSendChat = document.getElementById('btn-send-chat');
-        const btnClearChat = document.getElementById('btn-clear-chat');
-
-        async function sendMessage() {
-            const text = chatInput.value.trim();
-            if(!text) return;
-            chatInput.value = ''; 
-            try {
-                await addDoc(collection(db, "mensagens"), { usuario: chatUser.value, texto: text, timestamp: serverTimestamp() });
-            } catch(e) { console.error("Erro:", e); }
-        }
-
-        btnSendChat.addEventListener('click', sendMessage);
-        chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
-
-        // Ler mensagens
-        onSnapshot(query(collection(db, "mensagens"), orderBy("timestamp", "asc")), (snapshot) => {
-            chatWindow.innerHTML = '';
-            if(snapshot.empty) { chatWindow.innerHTML = '<p style="text-align:center; color:#888;">Inicia a conversa! 💬</p>'; return; }
-            
-            snapshot.forEach((docSnap) => {
-                const data = docSnap.data();
-                const docId = docSnap.id;
-                const isJosemar = data.usuario === "Josemar";
-                const bubbleClass = isJosemar ? 'msg-josemar' : 'msg-kiriana';
-                
-                const div = document.createElement('div');
-                div.className = `chat-bubble ${bubbleClass}`;
-                div.innerHTML = `
-                    <div class="msg-sender">
-                        <span>${data.usuario}</span>
-                        <button class="btn-del-msg" data-id="${docId}" title="Apagar Mensagem">🗑️</button>
-                    </div>
-                    <div>${data.texto}</div>
-                `;
-                chatWindow.appendChild(div);
             });
-            chatWindow.scrollTop = chatWindow.scrollHeight;
-        });
 
-        // Apagar mensagem individual
-        chatWindow.addEventListener('click', async (e) => {
-            if(e.target.classList.contains('btn-del-msg')) {
-                await deleteDoc(doc(db, "mensagens", e.target.dataset.id));
-            }
-        });
+            document.getElementById('debts-list-container').onclick = async (e) => {
+                if(e.target.classList.contains('btn-del-debt') && confirm("Apagar dívida?")) await deleteDoc(doc(db, "devedores", e.target.dataset.id));
+            };
 
-        // Apagar Chat Completo (Coletiva)
-        btnClearChat.addEventListener('click', async () => {
-            if(confirm("🚨 Atenção: Tens a certeza que queres APAGAR TODO o histórico do chat?")) {
-                const querySnapshot = await getDocs(collection(db, "mensagens"));
-                querySnapshot.forEach(async (documento) => {
-                    await deleteDoc(doc(db, "mensagens", documento.id));
+            // Chat Automático com Nome Logado!
+            document.getElementById('btn-send-chat').onclick = async () => {
+                const text = document.getElementById('chat-input').value.trim();
+                if(!text || !currentUserData) return;
+                document.getElementById('chat-input').value = ''; 
+                // Usa o Nome (displayName) de quem fez o login!
+                await addDoc(collection(db, "mensagens"), { usuario: currentUserData.displayName || "Desconhecido", texto: text, timestamp: serverTimestamp() });
+            };
+
+            onSnapshot(query(collection(db, "mensagens"), orderBy("timestamp", "asc")), (snapshot) => {
+                const chatWindow = document.getElementById('chat-window');
+                chatWindow.innerHTML = '';
+                snapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    // Compara o nome da mensagem com o teu nome ou da Kiriana para definir a cor
+                    const isMinhaMsg = currentUserData && data.usuario === currentUserData.displayName;
+                    const bubbleClass = isMinhaMsg ? 'msg-josemar' : 'msg-kiriana';
+                    
+                    chatWindow.innerHTML += `<div class="chat-bubble ${bubbleClass}">
+                        <div class="msg-sender"><span>${data.usuario}</span><button class="btn-del-msg" data-id="${docSnap.id}">🗑️</button></div>
+                        <div>${data.texto}</div></div>`;
                 });
-                alert("Histórico do chat limpo!");
-            }
-        });
-
+                chatWindow.scrollTop = chatWindow.scrollHeight;
+            });
+            
+            document.getElementById('chat-window').onclick = async (e) => {
+                if(e.target.classList.contains('btn-del-msg')) await deleteDoc(doc(db, "mensagens", e.target.dataset.id));
+            };
+            
+            document.getElementById('btn-clear-chat').onclick = async () => {
+                if(confirm("🚨 APAGAR TODO o histórico?")) {
+                    const qs = await getDocs(collection(db, "mensagens"));
+                    qs.forEach(async (d) => await deleteDoc(doc(db, "mensagens", d.id)));
+                }
+            };
+        }
     </script>
 </body>
 </html>
