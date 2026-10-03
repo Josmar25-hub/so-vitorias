@@ -241,15 +241,15 @@
         import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc, getDoc, getDocs, query, orderBy, serverTimestamp, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, updateProfile, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-        // AQUI ESTÁ A CHAVE EXATA E CORRIGIDA BASEADA NA TUA IMAGEM:
+        // A CHAVE EXATA E CORRIGIDA:
         const firebaseConfig = {
-  apiKey: "AIzaSyA7tOOE3nRuDZnZ138ZGCYwxOjuZKpTMwg",
-  authDomain: "so-vitorias.firebaseapp.com",
-  projectId: "so-vitorias",
-  storageBucket: "so-vitorias.firebasestorage.app",
-  messagingSenderId: "971516614367",
-  appId: "1:971516614367:web:5ba14a688e4d4137923b6a"
-};
+            apiKey: "AIzaSyA7tOOE3nRuDZnZ138ZGCYwxOjuZKpTMwg",
+            authDomain: "so-vitorias.firebaseapp.com",
+            projectId: "so-vitorias",
+            storageBucket: "so-vitorias.firebasestorage.app",
+            messagingSenderId: "971516614367",
+            appId: "1:971516614367:web:5ba14a688e4d4137923b6a"
+        };
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
