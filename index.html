@@ -239,9 +239,9 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc, getDoc, getDocs, query, orderBy, serverTimestamp, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        // NOVIDADE: Importações da Autenticação! 🔐
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, updateProfile, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
+        // AQUI ESTÁ A CHAVE EXATA E CORRIGIDA BASEADA NA TUA IMAGEM:
         const firebaseConfig = {
             apiKey: "AIzaSyA7tO0E3nRuDZnZ138ZGCYwxOjuZKpTMwg",
             authDomain: "so-vitorias.firebaseapp.com",
@@ -253,9 +253,9 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        const auth = getAuth(app); // Inicializando a Segurança
+        const auth = getAuth(app); 
         
-        let currentUserData = null; // Para guardar quem está logado no chat
+        let currentUserData = null; 
 
         // ==========================================
         // SISTEMA DE AUTENTICAÇÃO
@@ -264,24 +264,20 @@
         const appScreen = document.getElementById('app-screen');
         const displayUserName = document.getElementById('display-user-name');
 
-        // Escutar mudanças de estado (se está logado ou não)
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                // Utilizador Logado! Entra na app.
                 currentUserData = user;
                 displayUserName.innerText = `Olá, ${user.displayName || 'Parceiro'}!`;
                 authScreen.style.display = 'none';
                 appScreen.style.display = 'block';
-                carregarDadosDaApp(); // Chama a função que lê a base de dados
+                carregarDadosDaApp(); 
             } else {
-                // Não logado. Volta para a tela de login.
                 currentUserData = null;
                 authScreen.style.display = 'flex';
                 appScreen.style.display = 'none';
             }
         });
 
-        // REGISTO
         document.getElementById('btn-register').addEventListener('click', async () => {
             const nome = document.getElementById('reg-name').value;
             const telefone = document.getElementById('reg-phone').value;
@@ -291,27 +287,20 @@
             if(!nome || !telefone || !email || !password) return alert("Preenche todos os campos!");
 
             try {
-                // 1. Cria a conta no sistema de segurança
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                
-                // 2. Atualiza o perfil para guardar o Nome (Útil para o Chat!)
                 await updateProfile(userCredential.user, { displayName: nome });
-                
-                // 3. Salva os dados extras (Telefone) numa tabela de "usuarios"
                 await setDoc(doc(db, "usuarios", userCredential.user.uid), {
                     nome: nome,
                     telefone: telefone,
                     email: email,
                     dataRegisto: serverTimestamp()
                 });
-                
-                alert("Conta criada com sucesso!");
+                alert("Conta criada com sucesso! Bem-vindo ao Só Vitorias.");
             } catch (error) {
                 alert("Erro ao criar conta: " + error.message);
             }
         });
 
-        // LOGIN
         document.getElementById('btn-login').addEventListener('click', async () => {
             const email = document.getElementById('login-email').value;
             const password = document.getElementById('login-password').value;
@@ -322,22 +311,21 @@
             }
         });
 
-        // LOGOUT
         document.getElementById('btn-logout').addEventListener('click', () => {
             signOut(auth);
         });
 
 
         // ==========================================
-        // RESTANTE DA APLICAÇÃO (Envolvida numa função)
+        // RESTANTE DA APLICAÇÃO
         // ==========================================
         function carregarDadosDaApp() {
             
-            // Navegação Abas
             document.getElementById('btn-tab-metas').addEventListener('click', (e) => showTab('metas', e));
             document.getElementById('btn-tab-devedores').addEventListener('click', (e) => showTab('devedores', e));
             document.getElementById('btn-tab-fichas').addEventListener('click', (e) => showTab('fichas', e));
             document.getElementById('btn-tab-chat').addEventListener('click', (e) => showTab('chat', e));
+            
             function showTab(tabId, event) {
                 document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active-tab'));
                 document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -345,7 +333,6 @@
                 event.currentTarget.classList.add('active');
             }
 
-            // Moeda & Câmbio
             function formatMoney(value) {
                 if (!value) return '';
                 const currency = document.getElementById('global-currency').value;
@@ -458,7 +445,6 @@
                 const text = document.getElementById('chat-input').value.trim();
                 if(!text || !currentUserData) return;
                 document.getElementById('chat-input').value = ''; 
-                // Usa o Nome (displayName) de quem fez o login!
                 await addDoc(collection(db, "mensagens"), { usuario: currentUserData.displayName || "Desconhecido", texto: text, timestamp: serverTimestamp() });
             };
 
@@ -467,7 +453,6 @@
                 chatWindow.innerHTML = '';
                 snapshot.forEach((docSnap) => {
                     const data = docSnap.data();
-                    // Compara o nome da mensagem com o teu nome ou da Kiriana para definir a cor
                     const isMinhaMsg = currentUserData && data.usuario === currentUserData.displayName;
                     const bubbleClass = isMinhaMsg ? 'msg-josemar' : 'msg-kiriana';
                     
