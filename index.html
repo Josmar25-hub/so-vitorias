@@ -19,23 +19,30 @@
         }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--fundo); color: var(--texto); margin: 0; padding: 0; }
         
-        /* TELA DE AUTENTICAÇÃO */
-        #auth-screen { display: flex; justify-content: center; align-items: center; min-height: 100vh; background: linear-gradient(135deg, var(--azul-confianca) 0%, var(--amarelo-felicidade) 100%); padding: 1rem; }
+        /* TELA DE AUTENTICAÇÃO E BLOQUEIO */
+        #auth-screen, #lock-screen { display: flex; justify-content: center; align-items: center; min-height: 100vh; background: linear-gradient(135deg, var(--azul-confianca) 0%, var(--amarelo-felicidade) 100%); padding: 1rem; }
         .auth-card { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); width: 100%; max-width: 400px; text-align: center; }
         .auth-card h1 { color: var(--azul-confianca); margin-top: 0; }
         .auth-card input { margin-bottom: 1rem; width: 100%; padding: 0.8rem; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
         .auth-card button { width: 100%; margin-bottom: 1rem; }
         .toggle-auth { color: var(--azul-confianca); cursor: pointer; font-size: 0.9rem; text-decoration: underline; }
         
+        /* TELA DE BLOQUEIO BIOMÉTRICO (Escondida) */
+        #lock-screen { display: none; color: white; text-align: center; flex-direction: column; }
+        .lock-icon { font-size: 4rem; margin-bottom: 1rem; }
+        #btn-unlock { margin-top: 2rem; padding: 1rem 2rem; font-size: 1.1rem; border-radius: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        .btn-force-logout { margin-top: 2rem; font-size: 0.9rem; text-decoration: underline; cursor: pointer; color: rgba(255,255,255,0.8); }
+
         /* APLICAÇÃO PRINCIPAL (Escondida inicialmente) */
         #app-screen { display: none; }
         
         header { background-color: var(--azul-confianca); color: white; text-align: center; padding: 2rem 1rem; border-bottom: 5px solid var(--amarelo-felicidade); position: relative; }
         header h1 { margin: 0; font-size: 2.5rem; }
-        .header-controls { position: absolute; top: 1rem; right: 1rem; display: flex; gap: 10px; align-items: center; }
+        .header-controls { position: absolute; top: 1rem; right: 1rem; display: flex; flex-direction: column; gap: 5px; align-items: flex-end; }
         .user-greeting { font-weight: bold; font-size: 0.9rem; }
-        .btn-logout { background: transparent; border: 1px solid white; color: white; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; cursor: pointer; }
+        .btn-logout { background: transparent; border: 1px solid white; color: white; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.7rem; cursor: pointer; }
         .btn-logout:hover { background: white; color: var(--azul-confianca); }
+        #btn-setup-biometria { background: var(--amarelo-felicidade); color: black; border: none; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.7rem; font-weight: bold; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
 
         .currency-selector { margin-top: 1rem; display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 15px; font-weight: bold; background: rgba(0,0,0,0.1); padding: 10px; border-radius: 8px; max-width: 600px; margin-left: auto; margin-right: auto; }
         .currency-selector select, .currency-selector input { padding: 0.4rem 0.8rem; border-radius: 20px; border: 2px solid white; background: rgba(255, 255, 255, 0.2); color: white; font-weight: bold; outline: none; }
@@ -107,7 +114,6 @@
          TELA DE AUTENTICAÇÃO
     ========================================== -->
     <div id="auth-screen">
-        <!-- FORMULÁRIO DE LOGIN -->
         <div class="auth-card" id="login-form">
             <h1>Só vitorias 🎉</h1>
             <p>Bem-vindo de volta! Faz login para aceder ao vosso painel.</p>
@@ -117,7 +123,6 @@
             <p class="toggle-auth" onclick="toggleAuthForms()">Ainda não tens conta? Regista-te aqui!</p>
         </div>
 
-        <!-- FORMULÁRIO DE REGISTO -->
         <div class="auth-card" id="register-form" style="display: none;">
             <h1>Criar Conta 💍</h1>
             <p>Preenche os teus dados para começares a planear.</p>
@@ -131,13 +136,25 @@
     </div>
 
     <!-- ==========================================
+         TELA DE BLOQUEIO BIOMÉTRICO (FACE ID)
+    ========================================== -->
+    <div id="lock-screen">
+        <div class="lock-icon">🔐</div>
+        <h1>Só vitorias</h1>
+        <p>A aplicação está protegida no teu telemóvel.</p>
+        <button id="btn-unlock" class="btn-primary">Desbloquear com Biometria ☝🏾</button>
+        <p class="btn-force-logout" id="btn-force-logout">Sair e entrar com outra conta</p>
+    </div>
+
+    <!-- ==========================================
          APLICAÇÃO PRINCIPAL (PROTEGIDA)
     ========================================== -->
     <div id="app-screen">
         <header>
             <div class="header-controls">
                 <span class="user-greeting" id="display-user-name">Olá!</span>
-                <button class="btn-logout" id="btn-logout">Sair</button>
+                <button class="btn-logout" id="btn-logout">Terminar Sessão</button>
+                <button id="btn-setup-biometria">Ativar Biometria ☝🏾</button>
             </div>
             
             <h1>Só vitorias 🎉</h1>
@@ -235,13 +252,13 @@
         }
     </script>
 
-    <!-- SCRIPT FIREBASE -->
+    <!-- SCRIPT FIREBASE E LÓGICA -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc, getDoc, getDocs, query, orderBy, serverTimestamp, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, updateProfile, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-        // A CHAVE EXATA E CORRIGIDA:
+        // A CHAVE CORRETA:
         const firebaseConfig = {
             apiKey: "AIzaSyA7tOOE3nRuDZnZ138ZGCYwxOjuZKpTMwg",
             authDomain: "so-vitorias.firebaseapp.com",
@@ -256,59 +273,140 @@
         const auth = getAuth(app); 
         
         let currentUserData = null; 
+        let appLoaded = false;
 
-        // ==========================================
-        // SISTEMA DE AUTENTICAÇÃO
-        // ==========================================
         const authScreen = document.getElementById('auth-screen');
+        const lockScreen = document.getElementById('lock-screen');
         const appScreen = document.getElementById('app-screen');
         const displayUserName = document.getElementById('display-user-name');
 
+        // ==========================================
+        // 1. SISTEMA DE AUTENTICAÇÃO E BLOQUEIO
+        // ==========================================
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 currentUserData = user;
                 displayUserName.innerText = `Olá, ${user.displayName || 'Parceiro'}!`;
                 authScreen.style.display = 'none';
-                appScreen.style.display = 'block';
-                carregarDadosDaApp(); 
+                
+                // Verifica se a biometria está ativada neste aparelho
+                if (localStorage.getItem("biometria_ativa") === "true") {
+                    lockScreen.style.display = 'flex';
+                    appScreen.style.display = 'none';
+                } else {
+                    lockScreen.style.display = 'none';
+                    appScreen.style.display = 'block';
+                    iniciarApp();
+                }
             } else {
                 currentUserData = null;
                 authScreen.style.display = 'flex';
+                lockScreen.style.display = 'none';
                 appScreen.style.display = 'none';
             }
         });
 
+        // ----------------- BIOMETRIA (WEBAUTHN) -----------------
+        const btnSetupBiometria = document.getElementById('btn-setup-biometria');
+        const btnUnlock = document.getElementById('btn-unlock');
+
+        // ATIVAR A BIOMETRIA
+        btnSetupBiometria.addEventListener('click', async () => {
+            if (!window.PublicKeyCredential) {
+                return alert("O teu dispositivo ou navegador não suporta biometria web.");
+            }
+            try {
+                // Prepara os dados para registar o rosto/dedo
+                const challenge = new Uint8Array(32);
+                window.crypto.getRandomValues(challenge);
+                const userId = new Uint8Array(16);
+                window.crypto.getRandomValues(userId);
+
+                const publicKey = {
+                    challenge: challenge,
+                    rp: { name: "Só Vitorias", id: window.location.hostname }, // Usa o teu domínio do GitHub
+                    user: { id: userId, name: currentUserData.email, displayName: currentUserData.displayName },
+                    pubKeyCredParams: [{ type: "public-key", alg: -7 }, { type: "public-key", alg: -257 }],
+                    authenticatorSelection: { authenticatorAttachment: "platform", userVerification: "required" },
+                    timeout: 60000
+                };
+                
+                // O navegador vai abrir o Face ID / Impressão digital aqui!
+                const cred = await navigator.credentials.create({ publicKey });
+                
+                // Guarda o ID localmente para saber que está protegido
+                const rawIdArray = new Uint8Array(cred.rawId);
+                const base64Id = btoa(String.fromCharCode.apply(null, rawIdArray));
+                localStorage.setItem("biometria_ativa", "true");
+                localStorage.setItem("biometria_id", base64Id);
+                
+                alert("🔐 Biometria ativada com sucesso! Da próxima vez que abrires a app, pedirá o teu rosto ou impressão digital.");
+                btnSetupBiometria.style.display = 'none';
+                
+            } catch (e) {
+                console.error(e);
+                alert("Falha ao configurar a biometria. Certifica-te que tens o bloqueio de ecrã ativo no telemóvel.");
+            }
+        });
+
+        // DESBLOQUEAR A APP
+        btnUnlock.addEventListener('click', async () => {
+            const storedId = localStorage.getItem("biometria_id");
+            if (!storedId) return;
+            try {
+                const challenge = new Uint8Array(32);
+                window.crypto.getRandomValues(challenge);
+
+                const binaryString = atob(storedId);
+                const rawId = new Uint8Array(binaryString.length);
+                for (let i = 0; i < binaryString.length; i++) rawId[i] = binaryString.charCodeAt(i);
+
+                const publicKey = {
+                    challenge: challenge,
+                    allowCredentials: [{ type: "public-key", id: rawId }],
+                    userVerification: "required"
+                };
+                
+                // O navegador pede o Face ID / Dedo aqui!
+                await navigator.credentials.get({ publicKey });
+                
+                // Desbloqueado com Sucesso!
+                lockScreen.style.display = 'none';
+                appScreen.style.display = 'block';
+                iniciarApp();
+                
+            } catch (e) {
+                console.error(e);
+                alert("Biometria falhou! Tenta novamente.");
+            }
+        });
+
+        // FORÇAR SAÍDA SE A BIOMETRIA FALHAR
+        document.getElementById('btn-force-logout').addEventListener('click', () => {
+            localStorage.removeItem("biometria_ativa");
+            localStorage.removeItem("biometria_id");
+            signOut(auth);
+        });
+
+        // ----------------- REGISTO E LOGIN -----------------
         document.getElementById('btn-register').addEventListener('click', async () => {
             const nome = document.getElementById('reg-name').value;
             const telefone = document.getElementById('reg-phone').value;
             const email = document.getElementById('reg-email').value;
             const password = document.getElementById('reg-password').value;
-
             if(!nome || !telefone || !email || !password) return alert("Preenche todos os campos!");
-
             try {
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 await updateProfile(userCredential.user, { displayName: nome });
-                await setDoc(doc(db, "usuarios", userCredential.user.uid), {
-                    nome: nome,
-                    telefone: telefone,
-                    email: email,
-                    dataRegisto: serverTimestamp()
-                });
+                await setDoc(doc(db, "usuarios", userCredential.user.uid), { nome, telefone, email, dataRegisto: serverTimestamp() });
                 alert("Conta criada com sucesso! Bem-vindo ao Só Vitorias.");
-            } catch (error) {
-                alert("Erro ao criar conta: " + error.message);
-            }
+            } catch (error) { alert("Erro ao criar conta: " + error.message); }
         });
 
         document.getElementById('btn-login').addEventListener('click', async () => {
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
             try {
-                await signInWithEmailAndPassword(auth, email, password);
-            } catch (error) {
-                alert("Erro no Login. Verifica os dados! " + error.message);
-            }
+                await signInWithEmailAndPassword(auth, document.getElementById('login-email').value, document.getElementById('login-password').value);
+            } catch (error) { alert("Erro no Login. Verifica os dados!"); }
         });
 
         document.getElementById('btn-logout').addEventListener('click', () => {
@@ -317,10 +415,18 @@
 
 
         // ==========================================
-        // RESTANTE DA APLICAÇÃO
+        // 2. FUNÇÕES DA APLICAÇÃO (METAS, DEVEDORES, CHAT)
         // ==========================================
-        function carregarDadosDaApp() {
+        function iniciarApp() {
+            if(appLoaded) return; // Evita carregar os eventos duas vezes
+            appLoaded = true;
             
+            // Verifica se deve esconder o botão de configurar biometria (se já configurou)
+            if (localStorage.getItem("biometria_ativa") === "true") {
+                document.getElementById('btn-setup-biometria').style.display = 'none';
+            }
+
+            // Abas
             document.getElementById('btn-tab-metas').addEventListener('click', (e) => showTab('metas', e));
             document.getElementById('btn-tab-devedores').addEventListener('click', (e) => showTab('devedores', e));
             document.getElementById('btn-tab-fichas').addEventListener('click', (e) => showTab('fichas', e));
@@ -440,7 +546,7 @@
                 if(e.target.classList.contains('btn-del-debt') && confirm("Apagar dívida?")) await deleteDoc(doc(db, "devedores", e.target.dataset.id));
             };
 
-            // Chat Automático com Nome Logado!
+            // Chat
             document.getElementById('btn-send-chat').onclick = async () => {
                 const text = document.getElementById('chat-input').value.trim();
                 if(!text || !currentUserData) return;
