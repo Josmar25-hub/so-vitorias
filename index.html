@@ -5,134 +5,167 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Só vitorias 💍✈️</title>
     
+    <!-- Evitar piscar branco no carregamento se o modo escuro estiver ativo -->
+    <script>
+        if (localStorage.getItem('tema-escuro') === 'true') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+    </script>
+
     <style>
         /* ==============================
-           ESTILOS GERAIS (Cores Suaves)
+           ESTILOS GERAIS E VARIÁVEIS (Modo Claro/Escuro)
         ============================== */
         :root {
             --azul-confianca: #0056b3;
-            --azul-claro: #e6f0ff;
             --amarelo-felicidade: #ffb703;
             --vermelho-apagar: #ff4d4d;
             --verde-sucesso: #28a745;
-            --fundo-geral: #F4F6F8; /* Mais confortável para os olhos */
-            --fundo-cartao: #FAFAFA; /* Branco suave, não agride a vista */
+            --fundo-geral: #F4F6F8; 
+            --fundo-cartao: #FFFFFF; 
             --texto: #2C3E50;
+            --input-bg: #FFFFFF;
+            --input-border: #ccc;
+            --borda-suave: #eee;
         }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--fundo-geral); color: var(--texto); margin: 0; padding: 0; }
+
+        [data-theme="dark"] {
+            --azul-confianca: #1A73E8; 
+            --amarelo-felicidade: #F4B400;
+            --fundo-geral: #121212; 
+            --fundo-cartao: #1E1E1E; 
+            --texto: #E8EAED;
+            --input-bg: #2b2b2b;
+            --input-border: #444;
+            --borda-suave: #333;
+        }
+
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--fundo-geral); color: var(--texto); margin: 0; padding: 0; transition: background-color 0.3s, color 0.3s; }
         
         /* TELA DE AUTENTICAÇÃO E BLOQUEIO */
         #auth-screen, #lock-screen { display: flex; justify-content: center; align-items: center; min-height: 100vh; background: linear-gradient(135deg, var(--azul-confianca) 0%, var(--amarelo-felicidade) 100%); padding: 1rem; }
-        .auth-card { background: var(--fundo-cartao); padding: 2rem; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); width: 100%; max-width: 400px; text-align: center; }
+        .auth-card { background: var(--fundo-cartao); padding: 2.5rem 2rem; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); width: 100%; max-width: 400px; text-align: center; }
         .auth-card h1 { color: var(--azul-confianca); margin-top: 0; }
-        .auth-card input { margin-bottom: 1rem; width: 100%; padding: 0.8rem; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; background-color: #fff; }
-        .auth-card button { width: 100%; margin-bottom: 1rem; }
+        .auth-card input { margin-bottom: 1rem; width: 100%; padding: 0.9rem; border: 1px solid var(--input-border); border-radius: 8px; box-sizing: border-box; background-color: var(--input-bg); color: var(--texto); font-size: 1rem; }
+        .auth-card button { width: 100%; margin-bottom: 1rem; padding: 0.9rem; border-radius: 8px; font-size: 1rem; }
         .toggle-auth { color: var(--azul-confianca); cursor: pointer; font-size: 0.9rem; text-decoration: underline; }
         
-        /* TELA DE BLOQUEIO BIOMÉTRICO */
         #lock-screen { display: none; color: white; text-align: center; flex-direction: column; }
         .lock-icon { font-size: 4rem; margin-bottom: 1rem; }
-        #btn-unlock { margin-top: 2rem; padding: 1rem 2rem; font-size: 1.1rem; border-radius: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        #btn-unlock { margin-top: 2rem; padding: 1rem 2rem; font-size: 1.1rem; border-radius: 30px; }
         .btn-force-logout { margin-top: 2rem; font-size: 0.9rem; text-decoration: underline; cursor: pointer; color: rgba(255,255,255,0.8); }
 
-        /* APLICAÇÃO PRINCIPAL */
+        /* HEADER E MENU HAMBÚRGUER */
         #app-screen { display: none; }
-        
-        header { background-color: var(--azul-confianca); color: white; text-align: center; padding: 2rem 1rem; border-bottom: 5px solid var(--amarelo-felicidade); position: relative; }
-        header h1 { margin: 0; font-size: 2.5rem; }
-        .header-controls { position: absolute; top: 1rem; right: 1rem; display: flex; flex-direction: column; gap: 5px; align-items: flex-end; }
+        header { background-color: var(--azul-confianca); color: white; display: flex; align-items: center; justify-content: space-between; padding: 1rem; border-bottom: 5px solid var(--amarelo-felicidade); position: sticky; top: 0; z-index: 900; }
+        .btn-menu { background: transparent; border: none; color: white; font-size: 1.8rem; cursor: pointer; }
+        header h1 { margin: 0; font-size: 1.8rem; text-align: center; flex: 1; }
         .user-greeting { font-weight: bold; font-size: 0.9rem; }
-        .btn-logout { background: transparent; border: 1px solid white; color: white; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.7rem; cursor: pointer; }
-        .btn-logout:hover { background: white; color: var(--azul-confianca); }
-        #btn-setup-biometria { background: var(--amarelo-felicidade); color: black; border: none; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.7rem; font-weight: bold; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
 
-        .currency-selector { margin-top: 1rem; display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 15px; font-weight: bold; background: rgba(0,0,0,0.1); padding: 10px; border-radius: 8px; max-width: 600px; margin-left: auto; margin-right: auto; }
-        .currency-selector select, .currency-selector input { padding: 0.4rem 0.8rem; border-radius: 20px; border: 2px solid white; background: rgba(255, 255, 255, 0.2); color: white; font-weight: bold; outline: none; }
-        .currency-selector select option { color: black; }
-
-        .tabs { display: flex; justify-content: center; flex-wrap: wrap; gap: 1rem; margin-top: 1.5rem; }
-        .tab-btn { background-color: transparent; color: white; border: 2px solid white; border-radius: 20px; padding: 0.5rem 1.2rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; }
-        .tab-btn.active { background-color: var(--amarelo-felicidade); color: #000; border-color: var(--amarelo-felicidade); }
-        .tab-content { display: none; }
-        .active-tab { display: block; }
+        /* SIDEBAR (MENU LATERAL) */
+        .sidebar { position: fixed; top: 0; left: -280px; width: 280px; height: 100vh; background: var(--fundo-cartao); box-shadow: 2px 0 15px rgba(0,0,0,0.2); z-index: 1000; transition: left 0.3s ease; display: flex; flex-direction: column; }
+        .sidebar.open { left: 0; }
+        .sidebar-header { padding: 1.5rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--borda-suave); }
+        .sidebar-header h2 { margin: 0; color: var(--azul-confianca); font-size: 1.4rem; }
+        .btn-close-menu { background: transparent; border: none; font-size: 1.5rem; color: var(--texto); cursor: pointer; }
+        .sidebar-content { padding: 1.5rem; flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 0.5rem; }
         
-        #btn-tab-admin { display: none; background-color: #34495e; border-color: #34495e; } /* Escondido por padrão */
-        #btn-tab-admin.active { background-color: #2c3e50; color: white; border-color: #2c3e50; }
+        .tab-btn { background: transparent; border: none; color: var(--texto); text-align: left; padding: 0.8rem 1rem; border-radius: 8px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+        .tab-btn:hover { background: var(--fundo-geral); }
+        .tab-btn.active { background: var(--amarelo-felicidade); color: #000; }
+        #btn-tab-admin { display: none; color: var(--vermelho-apagar); }
+        
+        .sidebar-footer { padding: 1.5rem; border-top: 1px solid var(--borda-suave); }
+        .theme-switch { display: flex; justify-content: space-between; align-items: center; font-weight: bold; }
 
+        .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; display: none; opacity: 0; transition: opacity 0.3s; }
+        .sidebar-overlay.open { display: block; opacity: 1; }
+
+        /* COMPONENTES PRINCIPAIS */
         main { max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
-        .card { background: var(--fundo-cartao); border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-top: 4px solid var(--amarelo-felicidade); }
-        h2 { color: var(--azul-confianca); margin-top: 0; display: flex; justify-content: space-between; align-items: center; }
-        input { padding: 0.8rem; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem; width: 100%; box-sizing: border-box; background-color: #fff; }
+        .tab-content { display: none; animation: fadeIn 0.3s ease; }
+        .active-tab { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .card { background: var(--fundo-cartao); border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border-top: 4px solid var(--amarelo-felicidade); }
+        h2 { color: var(--azul-confianca); margin-top: 0; margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; }
+        
+        input, select { padding: 0.8rem; border: 1px solid var(--input-border); border-radius: 8px; font-size: 1rem; width: 100%; box-sizing: border-box; background-color: var(--input-bg); color: var(--texto); }
         .form-group { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1.5rem; }
-        .row-inputs { flex-direction: row; flex-wrap: wrap; }
-        .row-inputs input { flex: 1; min-width: 150px; }
+        .row-inputs { display: flex; flex-wrap: wrap; gap: 1rem; }
+        .row-inputs input, .row-inputs button { flex: 1; min-width: 150px; }
         .grid-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-        .date-group { display: flex; flex-direction: column; font-size: 0.9rem; color: #555; }
+        .date-group { display: flex; flex-direction: column; font-size: 0.9rem; color: var(--texto); opacity: 0.8; }
         
-        button { padding: 0.8rem 1.5rem; border: none; border-radius: 6px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: transform 0.2s; }
-        button:active { transform: scale(0.98); }
+        button { padding: 0.8rem 1.5rem; border: none; border-radius: 8px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: transform 0.2s, opacity 0.2s; }
+        button:active { transform: scale(0.96); }
+        button:hover { opacity: 0.9; }
         .btn-primary { background-color: var(--amarelo-felicidade); color: #000; }
-        .btn-secondary { background-color: var(--azul-confianca); color: white; grid-column: span 2; }
-        .btn-delete { background-color: transparent; color: var(--vermelho-apagar); font-size: 1.2rem; padding: 0.2rem 0.5rem; cursor: pointer; border: none; }
+        .btn-secondary { background-color: var(--azul-confianca); color: white; }
+        .btn-delete { background-color: transparent; color: var(--vermelho-apagar); font-size: 1.2rem; padding: 0.2rem 0.5rem; border: none; }
+        .btn-danger { background-color: var(--vermelho-apagar); color: white; }
+
+        /* UTILITÁRIOS RESPONSIVOS */
+        @media (max-width: 600px) {
+            .grid-inputs { grid-template-columns: 1fr; }
+            header h1 { font-size: 1.5rem; }
+            .user-greeting { display: none; } /* Esconde o "Olá" no telemóvel para poupar espaço */
+        }
+
+        /* METAS */
+        .progress-text { font-weight: bold; color: var(--azul-confianca); }
+        .progress-bar { width: 100%; height: 12px; background-color: var(--borda-suave); border-radius: 10px; overflow: hidden; margin-bottom: 1.5rem; }
+        .progress-fill { height: 100%; background-color: var(--amarelo-felicidade); transition: width 0.4s ease; width: 0%; }
+        .step-list { list-style: none; padding: 0; }
+        .step-item { display: flex; justify-content: space-between; align-items: center; padding: 0.8rem; background: var(--fundo-geral); margin-bottom: 0.5rem; border-radius: 8px; border-left: 4px solid var(--borda-suave); }
+        .step-item.completed { border-left-color: var(--verde-sucesso); opacity: 0.6; }
+        .step-item.completed label { text-decoration: line-through; }
+        .step-price { font-weight: bold; color: var(--texto); opacity: 0.7; }
+
+        /* DEVEDORES & ADMIN */
+        .debt-list, .user-list { list-style: none; padding: 0; }
+        .debt-item, .user-item { background: var(--fundo-geral); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid var(--azul-confianca); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .debt-info h3 { margin: 0 0 0.3rem 0; color: var(--azul-confianca); font-size: 1.1rem; }
+        .debt-total-display { font-size: 1.2rem; font-weight: bold; }
+        .person-card { background: var(--fundo-geral); padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem; border: 2px solid var(--borda-suave); }
+        .person-card h3 { margin-top: 0; color: var(--azul-confianca); border-bottom: 2px solid var(--amarelo-felicidade); padding-bottom: 0.5rem; }
+        .person-total { font-size: 1.3rem; font-weight: bold; color: var(--verde-sucesso); margin-top: 1rem; text-align: right; }
         
-        /* ADMIN E PERFIL */
-        .user-list { list-style: none; padding: 0; }
-        .user-item { display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 1rem; border-radius: 8px; margin-bottom: 0.5rem; border-left: 4px solid var(--azul-claro); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
         .status-badge { padding: 0.3rem 0.6rem; border-radius: 12px; font-size: 0.8rem; font-weight: bold; }
         .status-online { background-color: #d4edda; color: #155724; }
         .status-offline { background-color: #f8d7da; color: #721c24; }
-        .btn-auth-toggle { padding: 0.4rem 0.8rem; font-size: 0.8rem; border-radius: 6px; cursor: pointer; border: none; color: white; }
-        .btn-auth-yes { background-color: var(--vermelho-apagar); }
-        .btn-auth-no { background-color: var(--verde-sucesso); }
+        .btn-auth-toggle { padding: 0.5rem 1rem; font-size: 0.85rem; border-radius: 6px; color: white; }
 
-        .profile-setting { display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #fff; border-radius: 8px; margin-bottom: 1rem; }
-        .profile-setting input[type="number"] { width: 80px; text-align: center; }
-
-        /* Metas */
-        .goal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
-        .progress-text { font-weight: bold; color: var(--azul-confianca); }
-        .progress-bar { width: 100%; height: 20px; background-color: var(--azul-claro); border-radius: 10px; overflow: hidden; margin-bottom: 1.5rem; }
-        .progress-fill { height: 100%; background-color: var(--amarelo-felicidade); transition: width 0.4s ease; width: 0%; }
-        .step-list { list-style: none; padding: 0; }
-        .step-item { display: flex; justify-content: space-between; align-items: center; padding: 0.8rem; background: var(--fundo-geral); margin-bottom: 0.5rem; border-radius: 6px; border-left: 4px solid #ccc; }
-        .step-item.completed { border-left-color: var(--verde-sucesso); opacity: 0.7; }
-        .step-item.completed label { text-decoration: line-through; }
-        .step-price { font-weight: bold; color: #555; }
-        .btn-small { padding: 0.5rem 1rem; font-size: 0.9rem; }
-
-        /* Devedores e Fichas */
-        .debt-list { list-style: none; padding: 0; margin-top: 1rem; }
-        .debt-item { background: var(--fundo-geral); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid var(--azul-confianca); display: flex; justify-content: space-between; align-items: center; }
-        .debt-info h3 { margin: 0 0 0.5rem 0; color: var(--azul-confianca); font-size: 1.1rem; }
-        .debt-info p { margin: 0; font-size: 0.9rem; color: #555; }
-        .debt-total-display { font-size: 1.2rem; font-weight: bold; color: #000; display: flex; align-items: center; gap: 10px; }
-        .person-card { background: var(--fundo-geral); padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem; border: 2px solid var(--azul-claro); }
-        .person-card h3 { margin-top: 0; color: var(--azul-confianca); border-bottom: 2px solid var(--amarelo-felicidade); padding-bottom: 0.5rem; }
-        .person-total { font-size: 1.3rem; font-weight: bold; color: var(--verde-sucesso); margin-top: 1rem; text-align: right; }
-        .mini-debt { background: var(--fundo-cartao); padding: 0.8rem; border-radius: 6px; margin-bottom: 0.5rem; font-size: 0.9rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-
-        /* Chat */
-        .chat-container { display: flex; flex-direction: column; height: 550px; }
-        .chat-window { flex: 1; overflow-y: auto; padding: 1rem; background: #e9ecef; border-radius: 8px; margin-bottom: 1rem; display: flex; flex-direction: column; gap: 10px; }
-        .chat-bubble { max-width: 75%; padding: 10px 15px; border-radius: 15px; position: relative; word-wrap: break-word; font-size: 0.95rem; line-height: 1.4; display: flex; flex-direction: column; }
+        /* CHAT */
+        .chat-container { display: flex; flex-direction: column; height: 60vh; }
+        .chat-window { flex: 1; overflow-y: auto; padding: 1rem; background: var(--fundo-geral); border-radius: 8px; margin-bottom: 1rem; display: flex; flex-direction: column; gap: 10px; }
+        .chat-bubble { max-width: 80%; padding: 10px 15px; border-radius: 15px; position: relative; word-wrap: break-word; font-size: 0.95rem; line-height: 1.4; display: flex; flex-direction: column; }
         .msg-josemar { align-self: flex-end; background-color: var(--azul-confianca); color: white; border-bottom-right-radius: 2px; }
         .msg-kiriana { align-self: flex-start; background-color: var(--amarelo-felicidade); color: #000; border-bottom-left-radius: 2px; }
         .msg-sender { font-size: 0.75rem; font-weight: bold; margin-bottom: 4px; opacity: 0.8; display: flex; justify-content: space-between; }
-        .chat-controls { display: flex; gap: 10px; align-items: stretch; }
+        .chat-controls { display: flex; gap: 10px; }
         .chat-controls input { flex: 1; }
-        .btn-del-msg { background: transparent; border: none; color: inherit; opacity: 0.6; cursor: pointer; font-size: 0.8rem; }
-        .btn-del-msg:hover { opacity: 1; }
+
+        /* CONFIGURAÇÕES DE PERFIL */
+        .profile-setting { display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: var(--fundo-geral); border-radius: 8px; margin-bottom: 1rem; flex-wrap: wrap; gap: 10px;}
+        .profile-setting input[type="number"] { width: 80px; text-align: center; }
+
+        /* SISTEMA DE NOTIFICAÇÃO (TOAST) */
+        #toast { position: fixed; bottom: -100px; right: 20px; background-color: var(--vermelho-apagar); color: white; padding: 1rem 1.5rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); font-weight: bold; z-index: 9999; transition: bottom 0.4s ease; display: flex; align-items: center; gap: 10px; }
+        #toast.show { bottom: 20px; }
+
     </style>
 </head>
 <body>
 
-    <!-- ==========================================
-         TELA DE AUTENTICAÇÃO
-    ========================================== -->
+    <!-- NOTIFICAÇÕES (TOAST) -->
+    <div id="toast">🚨 <span>Nova notificação</span></div>
+
+    <!-- TELA DE AUTENTICAÇÃO -->
     <div id="auth-screen">
         <div class="auth-card" id="login-form">
             <h1>Só vitorias 🎉</h1>
-            <p>Bem-vindo! Faz login para aceder ao vosso painel.</p>
+            <p>Bem-vindo! Faz login para aceder.</p>
             <input type="email" id="login-email" placeholder="O teu e-mail">
             <input type="password" id="login-password" placeholder="Palavra-passe">
             <button class="btn-primary" id="btn-login">Entrar</button>
@@ -141,7 +174,7 @@
 
         <div class="auth-card" id="register-form" style="display: none;">
             <h1>Criar Conta 💍</h1>
-            <p>Preenche os dados. O administrador terá de autorizar o teu acesso.</p>
+            <p id="reg-msg">O administrador terá de autorizar o teu acesso após o registo.</p>
             <input type="text" id="reg-name" placeholder="O teu Nome">
             <input type="text" id="reg-phone" placeholder="Número de Telefone">
             <input type="email" id="reg-email" placeholder="E-mail">
@@ -151,58 +184,62 @@
         </div>
     </div>
 
-    <!-- ==========================================
-         TELA DE BLOQUEIO BIOMÉTRICO (FACE ID)
-    ========================================== -->
+    <!-- TELA DE BLOQUEIO BIOMÉTRICO -->
     <div id="lock-screen">
         <div class="lock-icon">🔐</div>
         <h1>Só vitorias</h1>
-        <p>A aplicação está protegida no teu telemóvel.</p>
+        <p>Aplicação protegida.</p>
         <button id="btn-unlock" class="btn-primary">Desbloquear com Biometria ☝🏾</button>
         <p class="btn-force-logout" id="btn-force-logout">Sair e entrar com outra conta</p>
     </div>
 
-    <!-- ==========================================
-         APLICAÇÃO PRINCIPAL
-    ========================================== -->
+    <!-- APLICAÇÃO PRINCIPAL -->
     <div id="app-screen">
-        <header>
-            <div class="header-controls">
-                <span class="user-greeting" id="display-user-name">Olá!</span>
-                <button class="btn-logout" id="btn-logout">Terminar Sessão</button>
-                <button id="btn-setup-biometria">Ativar Biometria ☝🏾</button>
-            </div>
-            
-            <h1>Só vitorias 🎉</h1>
-            <p>O caminho para o nosso final feliz!</p>
-            
-            <div class="currency-selector">
-                <div>
-                    <label>Moeda Principal:</label>
-                    <select id="global-currency">
-                        <option value="BRL">Real (R$)</option>
-                        <option value="AOA">Kwanza (Kz)</option>
-                    </select>
-                </div>
-                <div>
-                    <label>Câmbio (1 R$ = ? Kz):</label>
-                    <input type="number" id="daily-exchange-rate" value="170" style="width: 100px;">
-                </div>
-            </div>
+        <!-- Overlay escuro ao abrir o menu -->
+        <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
-            <div class="tabs">
-                <button class="tab-btn active" id="btn-tab-metas">Metas 🎯</button>
-                <button class="tab-btn" id="btn-tab-devedores">Devedores 💸</button>
-                <button class="tab-btn" id="btn-tab-fichas">Fichas 🗂️</button>
-                <button class="tab-btn" id="btn-tab-chat">Chat ❤️</button>
-                <button class="tab-btn" id="btn-tab-perfil">Perfil 👤</button>
-                <button class="tab-btn" id="btn-tab-admin">Admin 🛡️</button>
+        <!-- Menu Lateral (Sidebar) -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>Menu</h2>
+                <button class="btn-close-menu" id="btn-close-sidebar">✖</button>
             </div>
+            <div class="sidebar-content">
+                <button class="tab-btn active" data-target="metas">🎯 Metas</button>
+                <button class="tab-btn" data-target="devedores">💸 Devedores</button>
+                <button class="tab-btn" data-target="fichas">🗂️ Fichas</button>
+                <button class="tab-btn" data-target="chat">❤️ Chat</button>
+                <button class="tab-btn" data-target="perfil">👤 Perfil & Seg.</button>
+                <button class="tab-btn" data-target="admin" id="btn-tab-admin">🛡️ Admin (VIP)</button>
+            </div>
+            <div class="sidebar-footer">
+                <div class="theme-switch">
+                    <span>🌙 Modo Escuro</span>
+                    <input type="checkbox" id="toggle-theme" style="width: auto;">
+                </div>
+            </div>
+        </nav>
+
+        <header>
+            <button class="btn-menu" id="btn-open-sidebar">☰</button>
+            <h1>Só vitorias 🎉</h1>
+            <span class="user-greeting" id="display-user-name">Olá!</span>
         </header>
 
         <main>
             <!-- ABA: METAS -->
             <section id="metas" class="tab-content active-tab">
+                <div class="card">
+                    <h2>Conversor Rápido 💱</h2>
+                    <div class="row-inputs">
+                        <select id="global-currency">
+                            <option value="BRL">Real (R$)</option>
+                            <option value="AOA">Kwanza (Kz)</option>
+                        </select>
+                        <input type="number" id="daily-exchange-rate" placeholder="Câmbio do dia (Ex: 170 Kz)">
+                    </div>
+                </div>
+
                 <div class="card add-meta-card">
                     <h2>Criar Nova Meta 🌟</h2>
                     <div class="form-group row-inputs">
@@ -216,15 +253,15 @@
             <!-- ABA: DEVEDORES -->
             <section id="devedores" class="tab-content">
                 <div class="card">
-                    <h2>Registrar Novo Empréstimo 💸</h2>
+                    <h2>Novo Empréstimo 💸</h2>
                     <div class="form-group grid-inputs">
-                        <input type="text" id="debt-name" placeholder="Nome da pessoa">
+                        <input type="text" id="debt-name" placeholder="Nome">
                         <input type="number" id="debt-amount" placeholder="Valor (em R$)">
-                        <div class="date-group"><label>Data Empréstimo</label><input type="date" id="debt-start"></div>
-                        <div class="date-group"><label>Data Devolução</label><input type="date" id="debt-end"></div>
+                        <div class="date-group"><label>Empréstimo</label><input type="date" id="debt-start"></div>
+                        <div class="date-group"><label>Devolução</label><input type="date" id="debt-end"></div>
                         <input type="number" id="debt-interest" placeholder="Juros %">
                         <input type="number" id="debt-total" placeholder="Total a devolver" readonly>
-                        <button id="add-debt-btn" class="btn-secondary">Salvar</button>
+                        <button id="add-debt-btn" class="btn-secondary" style="grid-column: 1 / -1;">Salvar</button>
                     </div>
                 </div>
                 <div class="card">
@@ -233,88 +270,94 @@
                 </div>
             </section>
 
-            <!-- ABA: FICHAS ISOLADAS -->
+            <!-- ABA: FICHAS -->
             <section id="fichas" class="tab-content">
                 <div class="card">
-                    <h2>Fichas de Devedores 🗂️</h2>
+                    <h2>Fichas Individuais 🗂️</h2>
                     <div id="fichas-container"></div>
                 </div>
             </section>
 
-            <!-- ABA: CHAT PRIVADO -->
+            <!-- ABA: CHAT -->
             <section id="chat" class="tab-content">
                 <div class="card chat-container">
                     <h2>Mural do Casal 💬</h2>
                     <div class="chat-window" id="chat-window"></div>
-                    <div class="chat-controls">
+                    <div class="chat-controls row-inputs">
                         <input type="text" id="chat-input" placeholder="Escreve uma mensagem..." autocomplete="off">
                         <button id="btn-send-chat" class="btn-primary">Enviar</button>
                     </div>
                 </div>
             </section>
 
-            <!-- ABA: PERFIL (Novo) -->
+            <!-- ABA: PERFIL (Biometria, Logout e Auto-Logout) -->
             <section id="perfil" class="tab-content">
                 <div class="card">
-                    <h2>Configurações de Segurança 🔒</h2>
-                    <p>Protege a tua sessão configurando o tempo de inatividade.</p>
-                    
-                    <div class="profile-setting">
-                        <div>
-                            <strong>Desconexão Automática (Inatividade)</strong>
-                            <p style="margin:0; font-size: 0.85rem; color: #555;">Desliga a conta se esqueceres o site aberto.</p>
-                        </div>
-                        <label class="switch">
-                            <input type="checkbox" id="toggle-inatividade" checked>
-                            <span>Ativado</span>
-                        </label>
+                    <h2>Ações da Conta 👤</h2>
+                    <div class="row-inputs">
+                        <button id="btn-setup-biometria" class="btn-primary">Ativar Biometria ☝🏾</button>
+                        <button id="btn-logout" class="btn-danger">Terminar Sessão</button>
                     </div>
+                </div>
 
-                    <div class="profile-setting" id="box-tempo-inatividade">
-                        <div>
-                            <strong>Tempo limite (minutos)</strong>
-                        </div>
-                        <div>
+                <div class="card">
+                    <h2>Segurança (Inatividade) 🔒</h2>
+                    <p>Desliga a conta se esqueceres o site aberto.</p>
+                    <div class="profile-setting">
+                        <strong>Bloqueio Automático</strong>
+                        <input type="checkbox" id="toggle-inatividade" style="width: auto;">
+                    </div>
+                    <div class="profile-setting">
+                        <strong>Tempo (minutos)</strong>
+                        <div style="display:flex; gap:10px;">
                             <input type="number" id="input-tempo-inatividade" value="15" min="1">
-                            <button id="btn-salvar-perfil" class="btn-primary" style="padding: 0.4rem 1rem; margin-left: 10px;">Salvar</button>
+                            <button id="btn-salvar-perfil" class="btn-secondary">Salvar</button>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- ABA: ADMIN (Nova - Visível apenas para o Josemar) -->
+            <!-- ABA: ADMIN -->
             <section id="admin" class="tab-content">
                 <div class="card">
-                    <h2>Gestão de Acessos 🛡️</h2>
-                    <p>Aqui podes ver quem está online e autorizar novos utilizadores.</p>
-                    <ul id="admin-users-list" class="user-list">
-                        <!-- Utilizadores renderizados via JS -->
-                    </ul>
+                    <h2>Link de Convite VIP 💌</h2>
+                    <p>Envia este link para a Kiriana se registar e entrar automaticamente sem pedir autorização!</p>
+                    <button id="btn-gerar-convite" class="btn-primary" style="width: 100%;">Copiar Link VIP</button>
+                </div>
+
+                <div class="card">
+                    <h2>Controlo de Acessos 🛡️</h2>
+                    <p>Gere quem pode ver o site.</p>
+                    <ul id="admin-users-list" class="user-list"></ul>
                 </div>
             </section>
 
         </main>
     </div>
 
-    <!-- SCRIPT DE TRANSIÇÃO VISUAL LOGIN/REGISTO -->
+    <!-- SCRIPT DE TRANSIÇÃO LOGIN/REGISTO E MENU -->
     <script>
         function toggleAuthForms() {
             const loginForm = document.getElementById('login-form');
             const registerForm = document.getElementById('register-form');
-            if (loginForm.style.display === 'none') {
-                loginForm.style.display = 'block';
-                registerForm.style.display = 'none';
-            } else {
-                loginForm.style.display = 'none';
-                registerForm.style.display = 'block';
-            }
+            loginForm.style.display = loginForm.style.display === 'none' ? 'block' : 'none';
+            registerForm.style.display = registerForm.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Verifica se há convite VIP no URL para mudar o texto
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('invite') === 'vip_kiriana') {
+            document.getElementById('reg-msg').innerText = "✨ Convite VIP ativo! Podes registar-te e entrar direto.";
+            document.getElementById('reg-msg').style.color = "var(--verde-sucesso)";
+            document.getElementById('reg-msg').style.fontWeight = "bold";
+            toggleAuthForms(); // Vai direto para o registo
         }
     </script>
 
-    <!-- SCRIPT FIREBASE E LÓGICA GERAL -->
+    <!-- SCRIPT FIREBASE -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc, getDoc, getDocs, query, orderBy, serverTimestamp, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc, getDoc, query, orderBy, serverTimestamp, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, updateProfile, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         const firebaseConfig = {
@@ -332,41 +375,47 @@
         
         let currentUserData = null; 
         let appLoaded = false;
-        const ADMIN_EMAIL = "nelumbanathan15@gmail.com"; // O teu email de super-admin!
+        let initialAdminLoad = true;
+        const ADMIN_EMAIL = "nelumbanathan15@gmail.com"; 
 
-        // Variáveis de Inatividade
+        // Inatividade
         let inatividadeTimer;
-        let tempoLimite = 15 * 60 * 1000; // 15 min padrão
+        let tempoLimite = 15 * 60 * 1000;
         let inatividadeAtiva = true;
 
         const authScreen = document.getElementById('auth-screen');
         const lockScreen = document.getElementById('lock-screen');
         const appScreen = document.getElementById('app-screen');
-        const displayUserName = document.getElementById('display-user-name');
+
+        // TOAST NOTIFICATIONS
+        function mostrarToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.querySelector('span').innerText = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 5000);
+        }
 
         // ==========================================
-        // 1. SISTEMA DE AUTENTICAÇÃO E AUTORIZAÇÃO
+        // 1. AUTENTICAÇÃO
         // ==========================================
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // Ir buscar os dados do utilizador à base de dados para ver se está autorizado
                 const userDocRef = doc(db, "usuarios", user.uid);
                 const userSnap = await getDoc(userDocRef);
                 
                 if (userSnap.exists()) {
                     const userData = userSnap.data();
                     
-                    // Bloqueia quem não está autorizado (exceto tu, o admin)
                     if (userData.autorizado === false && user.email !== ADMIN_EMAIL) {
-                        alert("🔒 Acesso negado! O Administrador (Josemar) ainda não autorizou a tua conta.");
+                        // Regista a tentativa de acesso para o Admin ver
+                        await updateDoc(userDocRef, { ultimaTentativa: serverTimestamp() });
+                        alert("🔒 Acesso negado! O Administrador ainda não autorizou a tua conta.");
                         signOut(auth);
                         return;
                     }
 
-                    // Marca o utilizador como ONLINE
-                    await updateDoc(userDocRef, { online: true, ultimoAcesso: serverTimestamp() });
+                    await updateDoc(userDocRef, { online: true });
                     
-                    // Carrega definições de inatividade do utilizador
                     if (userData.inatividadeAtiva !== undefined) {
                         inatividadeAtiva = userData.inatividadeAtiva;
                         tempoLimite = (userData.tempoInatividade || 15) * 60 * 1000;
@@ -375,18 +424,14 @@
                     }
 
                     currentUserData = user;
-                    displayUserName.innerText = `Olá, ${user.displayName || 'Parceiro'}!`;
+                    document.getElementById('display-user-name').innerText = `Olá, ${user.displayName || 'Parceiro'}!`;
                     authScreen.style.display = 'none';
                     
-                    // Mostra a aba Admin se for o Josemar
                     if (user.email === ADMIN_EMAIL) {
-                        document.getElementById('btn-tab-admin').style.display = 'inline-block';
+                        document.getElementById('btn-tab-admin').style.display = 'block';
                         carregarAbaAdmin();
-                    } else {
-                        document.getElementById('btn-tab-admin').style.display = 'none';
                     }
 
-                    // Biometria Check
                     if (localStorage.getItem("biometria_ativa") === "true") {
                         lockScreen.style.display = 'flex';
                         appScreen.style.display = 'none';
@@ -395,7 +440,7 @@
                         appScreen.style.display = 'block';
                         iniciarApp();
                     }
-                    iniciarTimerInatividade(); // Inicia monitorização
+                    iniciarTimerInatividade();
                 }
             } else {
                 currentUserData = null;
@@ -406,67 +451,40 @@
             }
         });
 
-        // Quando o utilizador fecha a janela, tenta marcá-lo como offline
         window.addEventListener('beforeunload', () => {
-            if (currentUserData) {
-                updateDoc(doc(db, "usuarios", currentUserData.uid), { online: false });
-            }
+            if (currentUserData) updateDoc(doc(db, "usuarios", currentUserData.uid), { online: false });
         });
 
         // ==========================================
-        // 2. SISTEMA DE INATIVIDADE (AUTO-LOGOUT)
+        // 2. INATIVIDADE E PERFIL
         // ==========================================
         function resetTimer() {
             if (!inatividadeAtiva || !currentUserData) return;
             clearTimeout(inatividadeTimer);
             inatividadeTimer = setTimeout(async () => {
-                alert("⏰ Sessão expirada por inatividade. Por favor, faz login novamente.");
+                alert("⏰ Sessão expirada por inatividade.");
                 await updateDoc(doc(db, "usuarios", currentUserData.uid), { online: false });
                 signOut(auth);
             }, tempoLimite);
         }
-
         function iniciarTimerInatividade() {
-            window.addEventListener('mousemove', resetTimer);
-            window.addEventListener('keydown', resetTimer);
-            window.addEventListener('click', resetTimer);
-            window.addEventListener('scroll', resetTimer);
+            ['mousemove','keydown','click','scroll','touchstart'].forEach(evt => window.addEventListener(evt, resetTimer));
             resetTimer();
         }
+        function pararTimerInatividade() { clearTimeout(inatividadeTimer); }
 
-        function pararTimerInatividade() {
-            clearTimeout(inatividadeTimer);
-            window.removeEventListener('mousemove', resetTimer);
-            window.removeEventListener('keydown', resetTimer);
-            window.removeEventListener('click', resetTimer);
-            window.removeEventListener('scroll', resetTimer);
-        }
-
-        // Salvar configurações do Perfil
         document.getElementById('btn-salvar-perfil').addEventListener('click', async () => {
             const isAtivo = document.getElementById('toggle-inatividade').checked;
             const tempo = parseInt(document.getElementById('input-tempo-inatividade').value);
-            
-            if (tempo < 1) return alert("O tempo mínimo é 1 minuto.");
-
-            inatividadeAtiva = isAtivo;
-            tempoLimite = tempo * 60 * 1000;
-            
-            await updateDoc(doc(db, "usuarios", currentUserData.uid), {
-                inatividadeAtiva: isAtivo,
-                tempoInatividade: tempo
-            });
-            
-            alert("✅ Configurações de segurança guardadas com sucesso!");
-            resetTimer();
+            if (tempo < 1) return alert("Tempo mínimo: 1 minuto.");
+            inatividadeAtiva = isAtivo; tempoLimite = tempo * 60 * 1000;
+            await updateDoc(doc(db, "usuarios", currentUserData.uid), { inatividadeAtiva: isAtivo, tempoInatividade: tempo });
+            alert("✅ Configurações salvas!"); resetTimer();
         });
 
-        // Biometria (Mantida igual ao código anterior)
-        const btnSetupBiometria = document.getElementById('btn-setup-biometria');
-        const btnUnlock = document.getElementById('btn-unlock');
-
-        btnSetupBiometria.addEventListener('click', async () => {
-            if (!window.PublicKeyCredential) return alert("Dispositivo não suporta biometria web.");
+        // Biometria
+        document.getElementById('btn-setup-biometria').addEventListener('click', async () => {
+            if (!window.PublicKeyCredential) return alert("Biometria não suportada neste aparelho/navegador.");
             try {
                 const challenge = new Uint8Array(32); window.crypto.getRandomValues(challenge);
                 const userId = new Uint8Array(16); window.crypto.getRandomValues(userId);
@@ -477,33 +495,27 @@
                     authenticatorSelection: { authenticatorAttachment: "platform", userVerification: "required" }, timeout: 60000
                 };
                 const cred = await navigator.credentials.create({ publicKey });
-                const rawIdArray = new Uint8Array(cred.rawId);
                 localStorage.setItem("biometria_ativa", "true");
-                localStorage.setItem("biometria_id", btoa(String.fromCharCode.apply(null, rawIdArray)));
-                alert("🔐 Biometria ativada com sucesso!");
-                btnSetupBiometria.style.display = 'none';
-            } catch (e) { alert("Falha ao configurar biometria. Verifica se o bloqueio de ecrã está ativo no telemóvel."); }
+                localStorage.setItem("biometria_id", btoa(String.fromCharCode.apply(null, new Uint8Array(cred.rawId))));
+                alert("🔐 Biometria ativada!");
+                document.getElementById('btn-setup-biometria').style.display = 'none';
+            } catch (e) { alert("Falha na biometria. Verifica bloqueio de ecrã."); }
         });
 
-        btnUnlock.addEventListener('click', async () => {
+        document.getElementById('btn-unlock').addEventListener('click', async () => {
             const storedId = localStorage.getItem("biometria_id");
             if (!storedId) return;
             try {
                 const challenge = new Uint8Array(32); window.crypto.getRandomValues(challenge);
-                const binaryString = atob(storedId);
-                const rawId = new Uint8Array(binaryString.length);
+                const binaryString = atob(storedId); const rawId = new Uint8Array(binaryString.length);
                 for (let i = 0; i < binaryString.length; i++) rawId[i] = binaryString.charCodeAt(i);
                 await navigator.credentials.get({ publicKey: { challenge, allowCredentials: [{ type: "public-key", id: rawId }], userVerification: "required" } });
-                lockScreen.style.display = 'none';
-                appScreen.style.display = 'block';
-                iniciarApp();
+                lockScreen.style.display = 'none'; appScreen.style.display = 'block'; iniciarApp();
             } catch (e) { alert("Biometria falhou!"); }
         });
 
         document.getElementById('btn-force-logout').addEventListener('click', () => {
-            localStorage.removeItem("biometria_ativa");
-            localStorage.removeItem("biometria_id");
-            signOut(auth);
+            localStorage.removeItem("biometria_ativa"); localStorage.removeItem("biometria_id"); signOut(auth);
         });
 
         // ----------------- REGISTO E LOGIN -----------------
@@ -513,29 +525,29 @@
             const email = document.getElementById('reg-email').value;
             const password = document.getElementById('reg-password').value;
             if(!nome || !telefone || !email || !password) return alert("Preenche todos os campos!");
+            
+            // Verifica se tem convite VIP
+            const urlParams = new URLSearchParams(window.location.search);
+            const isVip = urlParams.get('invite') === 'vip_kiriana';
+            const eAdmin = (email === ADMIN_EMAIL);
+            const isAutorizado = eAdmin || isVip;
+
             try {
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 await updateProfile(userCredential.user, { displayName: nome });
-                
-                // O administrador tem autorização imediata. Outros começam como FALSE.
-                const eAdmin = (email === ADMIN_EMAIL);
-                
                 await setDoc(doc(db, "usuarios", userCredential.user.uid), { 
                     nome, telefone, email, 
-                    dataRegisto: serverTimestamp(),
-                    autorizado: eAdmin, // Só entra se for o admin ou se for autorizado depois
-                    online: eAdmin,
-                    inatividadeAtiva: true,
-                    tempoInatividade: 15
+                    dataRegisto: serverTimestamp(), autorizado: isAutorizado, online: isAutorizado,
+                    inatividadeAtiva: true, tempoInatividade: 15, ultimaTentativa: null
                 });
                 
-                if(!eAdmin) {
-                    alert("Conta criada com sucesso! ⚠️ No entanto, precisas que o Administrador aprove o teu acesso antes de poderes entrar.");
+                if(!isAutorizado) {
+                    alert("Conta criada! ⚠️ Aguarda aprovação do Administrador.");
                     signOut(auth);
-                } else {
-                    alert("Bem-vindo Administrador!");
+                } else if(isVip) {
+                    alert("Bem-vinda, convidada VIP! ✨");
                 }
-            } catch (error) { alert("Erro ao criar conta: " + error.message); }
+            } catch (error) { alert("Erro: " + error.message); }
         });
 
         document.getElementById('btn-login').addEventListener('click', async () => {
@@ -550,29 +562,49 @@
 
 
         // ==========================================
-        // 3. ABA DO ADMINISTRADOR (GERIR ACESSOS)
+        // 3. ADMIN: NOTIFICAÇÕES E LINK VIP
         // ==========================================
         function carregarAbaAdmin() {
+            // Botão Gerar Link
+            document.getElementById('btn-gerar-convite').addEventListener('click', () => {
+                const link = window.location.origin + window.location.pathname + "?invite=vip_kiriana";
+                navigator.clipboard.writeText(link).then(() => {
+                    alert("✨ Link VIP copiado! Envia para a Kiriana no WhatsApp.");
+                });
+            });
+
+            // Monitorizar Acessos e Utilizadores
             onSnapshot(collection(db, "usuarios"), (snapshot) => {
                 const lista = document.getElementById('admin-users-list');
                 lista.innerHTML = '';
+                
+                snapshot.docChanges().forEach((change) => {
+                    const usr = change.doc.data();
+                    if (!initialAdminLoad) {
+                        // Notifica se alguém novo se registar e não tiver autorização
+                        if (change.type === "added" && !usr.autorizado) {
+                            mostrarToast(`O utilizador ${usr.nome} registou-se e aguarda aprovação!`);
+                        }
+                        // Notifica se um utilizador não autorizado tentou fazer login (campo ultimaTentativa atualizado)
+                        if (change.type === "modified" && !usr.autorizado && usr.ultimaTentativa) {
+                            mostrarToast(`🚨 ${usr.nome} tentou aceder ao site!`);
+                        }
+                    }
+                });
+                initialAdminLoad = false;
+
+                // Renderizar Lista
                 snapshot.forEach((docSnap) => {
                     const usr = docSnap.data();
                     const statusClass = usr.online ? 'status-online' : 'status-offline';
-                    const statusText = usr.online ? 'Online 🟢' : 'Offline 🔴';
                     const btnAcao = usr.autorizado 
-                        ? `<button class="btn-auth-toggle btn-auth-yes" data-id="${docSnap.id}" data-action="bloquear">Revogar Acesso 🚫</button>`
-                        : `<button class="btn-auth-toggle btn-auth-no" data-id="${docSnap.id}" data-action="autorizar">Autorizar Acesso ✅</button>`;
+                        ? `<button class="btn-auth-toggle btn-danger" data-id="${docSnap.id}" data-action="bloquear">Revogar</button>`
+                        : `<button class="btn-auth-toggle btn-secondary" style="background:var(--verde-sucesso)" data-id="${docSnap.id}" data-action="autorizar">Autorizar</button>`;
 
                     lista.innerHTML += `
                         <li class="user-item">
-                            <div>
-                                <strong>${usr.nome}</strong> (${usr.email})<br>
-                                <span class="status-badge ${statusClass}">${statusText}</span>
-                            </div>
-                            <div>
-                                ${usr.email === ADMIN_EMAIL ? '<span style="font-size:0.8rem; color:gray;">Admin</span>' : btnAcao}
-                            </div>
+                            <div><strong>${usr.nome}</strong><br><span class="status-badge ${statusClass}">${usr.online ? 'Online 🟢' : 'Offline 🔴'}</span></div>
+                            <div>${usr.email === ADMIN_EMAIL ? '<span style="color:gray; font-size:0.8rem">Admin</span>' : btnAcao}</div>
                         </li>
                     `;
                 });
@@ -581,16 +613,14 @@
             document.getElementById('admin-users-list').addEventListener('click', async (e) => {
                 if (e.target.classList.contains('btn-auth-toggle')) {
                     const uid = e.target.dataset.id;
-                    const acao = e.target.dataset.action;
-                    const novoStatus = (acao === 'autorizar');
-                    await updateDoc(doc(db, "usuarios", uid), { autorizado: novoStatus });
+                    await updateDoc(doc(db, "usuarios", uid), { autorizado: e.target.dataset.action === 'autorizar' });
                 }
             });
         }
 
 
         // ==========================================
-        // 4. FUNÇÕES DA APLICAÇÃO (METAS, DEVEDORES, CHAT)
+        // 4. FUNCIONALIDADES DE UI (SIDEBAR & DARK MODE)
         // ==========================================
         function iniciarApp() {
             if(appLoaded) return;
@@ -600,20 +630,47 @@
                 document.getElementById('btn-setup-biometria').style.display = 'none';
             }
 
-            document.getElementById('btn-tab-metas').addEventListener('click', (e) => showTab('metas', e));
-            document.getElementById('btn-tab-devedores').addEventListener('click', (e) => showTab('devedores', e));
-            document.getElementById('btn-tab-fichas').addEventListener('click', (e) => showTab('fichas', e));
-            document.getElementById('btn-tab-chat').addEventListener('click', (e) => showTab('chat', e));
-            document.getElementById('btn-tab-perfil').addEventListener('click', (e) => showTab('perfil', e));
-            document.getElementById('btn-tab-admin').addEventListener('click', (e) => showTab('admin', e));
-            
-            function showTab(tabId, event) {
-                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active-tab'));
-                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                document.getElementById(tabId).classList.add('active-tab');
-                event.currentTarget.classList.add('active');
-            }
+            // MENU LATERAL
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            const btnOpen = document.getElementById('btn-open-sidebar');
+            const btnClose = document.getElementById('btn-close-sidebar');
 
+            function toggleSidebar() {
+                sidebar.classList.toggle('open');
+                overlay.classList.toggle('open');
+            }
+            btnOpen.addEventListener('click', toggleSidebar);
+            btnClose.addEventListener('click', toggleSidebar);
+            overlay.addEventListener('click', toggleSidebar);
+
+            // ABAS
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const target = e.currentTarget.dataset.target;
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active-tab'));
+                    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                    document.getElementById(target).classList.add('active-tab');
+                    e.currentTarget.classList.add('active');
+                    if(window.innerWidth < 800) toggleSidebar(); // Fecha o menu no telemóvel ao escolher aba
+                });
+            });
+
+            // MODO ESCURO
+            const toggleTheme = document.getElementById('toggle-theme');
+            toggleTheme.checked = localStorage.getItem('tema-escuro') === 'true';
+            
+            toggleTheme.addEventListener('change', (e) => {
+                if (e.target.checked) {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('tema-escuro', 'true');
+                } else {
+                    document.documentElement.removeAttribute('data-theme');
+                    localStorage.setItem('tema-escuro', 'false');
+                }
+            });
+
+            // LÓGICA DE METAS, DEVEDORES E CHAT (Igual ao anterior)
             function formatMoney(value) {
                 if (!value) return '';
                 const currency = document.getElementById('global-currency').value;
@@ -738,15 +795,11 @@
                     const bubbleClass = isMinhaMsg ? 'msg-josemar' : 'msg-kiriana';
                     
                     chatWindow.innerHTML += `<div class="chat-bubble ${bubbleClass}">
-                        <div class="msg-sender"><span>${data.usuario}</span><button class="btn-del-msg" data-id="${docSnap.id}">🗑️</button></div>
+                        <div class="msg-sender"><span>${data.usuario}</span></div>
                         <div>${data.texto}</div></div>`;
                 });
                 chatWindow.scrollTop = chatWindow.scrollHeight;
             });
-            
-            document.getElementById('chat-window').onclick = async (e) => {
-                if(e.target.classList.contains('btn-del-msg')) await deleteDoc(doc(db, "mensagens", e.target.dataset.id));
-            };
         }
     </script>
 </body>
