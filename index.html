@@ -291,20 +291,39 @@
             </section>
 
             <!-- ABA: PERFIL (Biometria, Logout e Auto-Logout) -->
+            <!-- ABA: PERFIL (Atualizada com Foto, Senha e Tema) -->
             <section id="perfil" class="tab-content">
-                <div class="card">
-                    <h2>Ações da Conta 👤</h2>
+                <div class="card" style="text-align: center;">
+                    <h2>O teu Perfil 👤</h2>
+                    
+                    <!-- FOTO DE PERFIL -->
+                    <img id="profile-avatar" src="https://ui-avatars.com/api/?name=User&background=random" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid var(--amarelo-felicidade); margin-bottom: 10px;">
+                    <br>
+                    <!-- O 'label' funciona como um botão falso que clica no input invisível -->
+                    <label for="input-foto" class="btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.8rem; cursor: pointer; border-radius: 20px;">Mudar Foto 📷</label>
+                    <input type="file" id="input-foto" accept="image/*" style="display: none;">
+                    
+                    <hr style="border: 1px solid var(--borda-suave); margin: 1.5rem 0;">
+                    
+                    <!-- MUDAR PALAVRA-PASSE -->
+                    <h3 style="text-align: left; color: var(--azul-confianca); margin-bottom: 10px; font-size: 1.1rem;">🔑 Alterar Palavra-passe</h3>
                     <div class="row-inputs">
-                        <button id="btn-setup-biometria" class="btn-primary">Ativar Biometria ☝🏾</button>
-                        <button id="btn-logout" class="btn-danger">Terminar Sessão</button>
+                        <input type="password" id="nova-senha" placeholder="Nova senha (mín. 6 letras)">
+                        <button id="btn-mudar-senha" class="btn-primary">Atualizar</button>
                     </div>
                 </div>
 
                 <div class="card">
-                    <h2>Segurança (Inatividade) 🔒</h2>
-                    <p>Desliga a conta se esqueceres o site aberto.</p>
+                    <h2>Preferências & Segurança ⚙️</h2>
+                    
+                    <!-- MODO ESCURO (Movido para aqui!) -->
                     <div class="profile-setting">
-                        <strong>Bloqueio Automático</strong>
+                        <strong>🌙 Modo Escuro</strong>
+                        <input type="checkbox" id="toggle-theme-perfil" style="width: auto;">
+                    </div>
+
+                    <div class="profile-setting">
+                        <strong>🔒 Bloqueio Automático</strong>
                         <input type="checkbox" id="toggle-inatividade" style="width: auto;">
                     </div>
                     <div class="profile-setting">
@@ -313,6 +332,13 @@
                             <input type="number" id="input-tempo-inatividade" value="15" min="1">
                             <button id="btn-salvar-perfil" class="btn-secondary">Salvar</button>
                         </div>
+                    </div>
+                    
+                    <hr style="border: 1px solid var(--borda-suave); margin: 1.5rem 0;">
+                    
+                    <div class="row-inputs">
+                        <button id="btn-setup-biometria" class="btn-primary">Ativar Biometria ☝🏾</button>
+                        <button id="btn-logout" class="btn-danger">Terminar Sessão</button>
                     </div>
                 </div>
             </section>
@@ -358,7 +384,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc, getDoc, query, orderBy, serverTimestamp, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, updateProfile, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, updateProfile, signOut , updatePassword , sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyA7tOOE3nRuDZnZ138ZGCYwxOjuZKpTMwg",
@@ -405,6 +431,12 @@
                 
                 if (userSnap.exists()) {
                     const userData = userSnap.data();
+
+                    if (userData.fotoUrl) {
+                        document.getElementById('profile-avatar').src = userData.fotoUrl;
+                    } else {
+                        document.getElementById('profile-avatar').src = `https://ui-avatars.com/api/?name=${user.displayName}&background=random`;
+                    }
                     
                     if (userData.autorizado === false && user.email !== ADMIN_EMAIL) {
                         // Regista a tentativa de acesso para o Admin ver
@@ -562,7 +594,7 @@
 
 
         // ==========================================
-        // 3. ADMIN: NOTIFICAÇÕES E LINK VIP
+        // 3. ADMIN: NOTIFICAÇÕES, LINK VIP E RECUPERAÇÃO
         // ==========================================
         function carregarAbaAdmin() {
             // Botão Gerar Link
@@ -581,11 +613,9 @@
                 snapshot.docChanges().forEach((change) => {
                     const usr = change.doc.data();
                     if (!initialAdminLoad) {
-                        // Notifica se alguém novo se registar e não tiver autorização
                         if (change.type === "added" && !usr.autorizado) {
                             mostrarToast(`O utilizador ${usr.nome} registou-se e aguarda aprovação!`);
                         }
-                        // Notifica se um utilizador não autorizado tentou fazer login (campo ultimaTentativa atualizado)
                         if (change.type === "modified" && !usr.autorizado && usr.ultimaTentativa) {
                             mostrarToast(`🚨 ${usr.nome} tentou aceder ao site!`);
                         }
@@ -593,27 +623,51 @@
                 });
                 initialAdminLoad = false;
 
-                // Renderizar Lista
+                // Renderizar Lista com o NOVO BOTÃO DE RECUPERAÇÃO
                 snapshot.forEach((docSnap) => {
                     const usr = docSnap.data();
                     const statusClass = usr.online ? 'status-online' : 'status-offline';
+                    
                     const btnAcao = usr.autorizado 
                         ? `<button class="btn-auth-toggle btn-danger" data-id="${docSnap.id}" data-action="bloquear">Revogar</button>`
                         : `<button class="btn-auth-toggle btn-secondary" style="background:var(--verde-sucesso)" data-id="${docSnap.id}" data-action="autorizar">Autorizar</button>`;
 
+                    // Novo botão de redefinir senha (só aparece para outros utilizadores, não para o admin)
+                    const btnReset = usr.email !== ADMIN_EMAIL 
+                        ? `<button class="btn-reset-senha btn-secondary" style="margin-left: 5px; padding: 0.5rem; font-size: 0.8rem; border-radius: 6px; border: none; cursor: pointer;" data-email="${usr.email}">Redefinir Senha 📧</button>` 
+                        : '';
+
                     lista.innerHTML += `
                         <li class="user-item">
                             <div><strong>${usr.nome}</strong><br><span class="status-badge ${statusClass}">${usr.online ? 'Online 🟢' : 'Offline 🔴'}</span></div>
-                            <div>${usr.email === ADMIN_EMAIL ? '<span style="color:gray; font-size:0.8rem">Admin</span>' : btnAcao}</div>
+                            <div style="display: flex; align-items: center;">
+                                ${usr.email === ADMIN_EMAIL ? '<span style="color:gray; font-size:0.8rem">Admin</span>' : btnAcao}
+                                ${btnReset}
+                            </div>
                         </li>
                     `;
                 });
             });
 
+            // Adicionar Eventos aos botões (Autorizar/Bloquear e Redefinir Senha)
             document.getElementById('admin-users-list').addEventListener('click', async (e) => {
+                // Se clicou em autorizar/bloquear
                 if (e.target.classList.contains('btn-auth-toggle')) {
                     const uid = e.target.dataset.id;
                     await updateDoc(doc(db, "usuarios", uid), { autorizado: e.target.dataset.action === 'autorizar' });
+                }
+                
+                // Se clicou no NOVO botão de Redefinir Senha
+                if (e.target.classList.contains('btn-reset-senha')) {
+                    const emailAlvo = e.target.dataset.email;
+                    if(confirm(`Queres enviar um e-mail de recuperação de senha para ${emailAlvo}?`)) {
+                        try {
+                            await sendPasswordResetEmail(auth, emailAlvo);
+                            alert(`✅ E-mail enviado com sucesso para ${emailAlvo}! A pessoa já pode criar uma senha nova.`);
+                        } catch (error) {
+                            alert("Erro ao enviar e-mail: " + error.message);
+                        }
+                    }
                 }
             });
         }
@@ -629,6 +683,60 @@
             if (localStorage.getItem("biometria_ativa") === "true") {
                 document.getElementById('btn-setup-biometria').style.display = 'none';
             }
+            // ==========================================
+            // LÓGICA DO PERFIL (FOTO, SENHA E TEMA)
+            // ==========================================
+
+            // 1. MODO ESCURO
+            const toggleThemePerfil = document.getElementById('toggle-theme-perfil');
+            toggleThemePerfil.checked = localStorage.getItem('tema-escuro') === 'true';
+            toggleThemePerfil.addEventListener('change', (e) => {
+                if (e.target.checked) {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('tema-escuro', 'true');
+                } else {
+                    document.documentElement.removeAttribute('data-theme');
+                    localStorage.setItem('tema-escuro', 'false');
+                }
+            });
+
+            // 2. MUDAR PALAVRA-PASSE
+            document.getElementById('btn-mudar-senha').addEventListener('click', async () => {
+                const novaSenha = document.getElementById('nova-senha').value;
+                if(novaSenha.length < 6) return alert("A senha precisa ter pelo menos 6 letras/números!");
+                
+                try {
+                    await updatePassword(currentUserData, novaSenha); // Firebase atualiza a senha
+                    alert("🔑 Palavra-passe atualizada com sucesso!");
+                    document.getElementById('nova-senha').value = '';
+                } catch (error) {
+                    // O Firebase exige que a pessoa tenha feito login recentemente para mudar a senha (segurança anti-roubo)
+                    if (error.code === 'auth/requires-recent-login') {
+                        alert("⚠️ Por segurança, termina a sessão e entra de novo para poderes mudar a senha.");
+                    } else {
+                        alert("Erro: " + error.message);
+                    }
+                }
+            });
+
+            // 3. MUDAR FOTO DE PERFIL
+            document.getElementById('input-foto').addEventListener('change', (e) => {
+                const ficheiro = e.target.files[0];
+                if (!ficheiro) return;
+
+                const reader = new FileReader(); // Cria o leitor robótico
+                
+                reader.onload = async (evento) => {
+                    const base64Image = evento.target.result; // A imagem transformada em texto gigante
+                    document.getElementById('profile-avatar').src = base64Image;
+                    
+                    // Guarda o texto da imagem na base de dados (Firestore)
+                    await updateDoc(doc(db, "usuarios", currentUserData.uid), { fotoUrl: base64Image });
+                    mostrarToast("📷 Foto atualizada com sucesso!");
+                };
+                
+                reader.readAsDataURL(ficheiro); // Manda o leitor ler a foto
+            });
 
             // MENU LATERAL
             const sidebar = document.getElementById('sidebar');
