@@ -7,33 +7,35 @@
     
     <style>
         /* ==============================
-           ESTILOS GERAIS
+           ESTILOS GERAIS (Cores Suaves)
         ============================== */
         :root {
             --azul-confianca: #0056b3;
             --azul-claro: #e6f0ff;
             --amarelo-felicidade: #ffb703;
             --vermelho-apagar: #ff4d4d;
-            --fundo: #f8f9fa;
-            --texto: #333333;
+            --verde-sucesso: #28a745;
+            --fundo-geral: #F4F6F8; /* Mais confortável para os olhos */
+            --fundo-cartao: #FAFAFA; /* Branco suave, não agride a vista */
+            --texto: #2C3E50;
         }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--fundo); color: var(--texto); margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--fundo-geral); color: var(--texto); margin: 0; padding: 0; }
         
         /* TELA DE AUTENTICAÇÃO E BLOQUEIO */
         #auth-screen, #lock-screen { display: flex; justify-content: center; align-items: center; min-height: 100vh; background: linear-gradient(135deg, var(--azul-confianca) 0%, var(--amarelo-felicidade) 100%); padding: 1rem; }
-        .auth-card { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); width: 100%; max-width: 400px; text-align: center; }
+        .auth-card { background: var(--fundo-cartao); padding: 2rem; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); width: 100%; max-width: 400px; text-align: center; }
         .auth-card h1 { color: var(--azul-confianca); margin-top: 0; }
-        .auth-card input { margin-bottom: 1rem; width: 100%; padding: 0.8rem; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+        .auth-card input { margin-bottom: 1rem; width: 100%; padding: 0.8rem; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; background-color: #fff; }
         .auth-card button { width: 100%; margin-bottom: 1rem; }
         .toggle-auth { color: var(--azul-confianca); cursor: pointer; font-size: 0.9rem; text-decoration: underline; }
         
-        /* TELA DE BLOQUEIO BIOMÉTRICO (Escondida) */
+        /* TELA DE BLOQUEIO BIOMÉTRICO */
         #lock-screen { display: none; color: white; text-align: center; flex-direction: column; }
         .lock-icon { font-size: 4rem; margin-bottom: 1rem; }
         #btn-unlock { margin-top: 2rem; padding: 1rem 2rem; font-size: 1.1rem; border-radius: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
         .btn-force-logout { margin-top: 2rem; font-size: 0.9rem; text-decoration: underline; cursor: pointer; color: rgba(255,255,255,0.8); }
 
-        /* APLICAÇÃO PRINCIPAL (Escondida inicialmente) */
+        /* APLICAÇÃO PRINCIPAL */
         #app-screen { display: none; }
         
         header { background-color: var(--azul-confianca); color: white; text-align: center; padding: 2rem 1rem; border-bottom: 5px solid var(--amarelo-felicidade); position: relative; }
@@ -49,15 +51,18 @@
         .currency-selector select option { color: black; }
 
         .tabs { display: flex; justify-content: center; flex-wrap: wrap; gap: 1rem; margin-top: 1.5rem; }
-        .tab-btn { background-color: transparent; color: white; border: 2px solid white; border-radius: 20px; padding: 0.5rem 1.5rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; }
+        .tab-btn { background-color: transparent; color: white; border: 2px solid white; border-radius: 20px; padding: 0.5rem 1.2rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; }
         .tab-btn.active { background-color: var(--amarelo-felicidade); color: #000; border-color: var(--amarelo-felicidade); }
         .tab-content { display: none; }
         .active-tab { display: block; }
+        
+        #btn-tab-admin { display: none; background-color: #34495e; border-color: #34495e; } /* Escondido por padrão */
+        #btn-tab-admin.active { background-color: #2c3e50; color: white; border-color: #2c3e50; }
 
         main { max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
-        .card { background: white; border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-top: 4px solid var(--amarelo-felicidade); }
+        .card { background: var(--fundo-cartao); border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-top: 4px solid var(--amarelo-felicidade); }
         h2 { color: var(--azul-confianca); margin-top: 0; display: flex; justify-content: space-between; align-items: center; }
-        input { padding: 0.8rem; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem; width: 100%; box-sizing: border-box; }
+        input { padding: 0.8rem; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem; width: 100%; box-sizing: border-box; background-color: #fff; }
         .form-group { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1.5rem; }
         .row-inputs { flex-direction: row; flex-wrap: wrap; }
         .row-inputs input { flex: 1; min-width: 150px; }
@@ -69,31 +74,42 @@
         .btn-primary { background-color: var(--amarelo-felicidade); color: #000; }
         .btn-secondary { background-color: var(--azul-confianca); color: white; grid-column: span 2; }
         .btn-delete { background-color: transparent; color: var(--vermelho-apagar); font-size: 1.2rem; padding: 0.2rem 0.5rem; cursor: pointer; border: none; }
-        .btn-clear-all { background-color: var(--vermelho-apagar); color: white; padding: 0.5rem 1rem; font-size: 0.9rem; border-radius: 20px; }
+        
+        /* ADMIN E PERFIL */
+        .user-list { list-style: none; padding: 0; }
+        .user-item { display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 1rem; border-radius: 8px; margin-bottom: 0.5rem; border-left: 4px solid var(--azul-claro); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .status-badge { padding: 0.3rem 0.6rem; border-radius: 12px; font-size: 0.8rem; font-weight: bold; }
+        .status-online { background-color: #d4edda; color: #155724; }
+        .status-offline { background-color: #f8d7da; color: #721c24; }
+        .btn-auth-toggle { padding: 0.4rem 0.8rem; font-size: 0.8rem; border-radius: 6px; cursor: pointer; border: none; color: white; }
+        .btn-auth-yes { background-color: var(--vermelho-apagar); }
+        .btn-auth-no { background-color: var(--verde-sucesso); }
+
+        .profile-setting { display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #fff; border-radius: 8px; margin-bottom: 1rem; }
+        .profile-setting input[type="number"] { width: 80px; text-align: center; }
 
         /* Metas */
         .goal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
-        .goal-title-area { display: flex; align-items: center; gap: 10px; }
         .progress-text { font-weight: bold; color: var(--azul-confianca); }
         .progress-bar { width: 100%; height: 20px; background-color: var(--azul-claro); border-radius: 10px; overflow: hidden; margin-bottom: 1.5rem; }
         .progress-fill { height: 100%; background-color: var(--amarelo-felicidade); transition: width 0.4s ease; width: 0%; }
         .step-list { list-style: none; padding: 0; }
-        .step-item { display: flex; justify-content: space-between; align-items: center; padding: 0.8rem; background: var(--fundo); margin-bottom: 0.5rem; border-radius: 6px; border-left: 4px solid #ccc; }
-        .step-item.completed { border-left-color: #28a745; opacity: 0.7; }
+        .step-item { display: flex; justify-content: space-between; align-items: center; padding: 0.8rem; background: var(--fundo-geral); margin-bottom: 0.5rem; border-radius: 6px; border-left: 4px solid #ccc; }
+        .step-item.completed { border-left-color: var(--verde-sucesso); opacity: 0.7; }
         .step-item.completed label { text-decoration: line-through; }
         .step-price { font-weight: bold; color: #555; }
         .btn-small { padding: 0.5rem 1rem; font-size: 0.9rem; }
 
         /* Devedores e Fichas */
         .debt-list { list-style: none; padding: 0; margin-top: 1rem; }
-        .debt-item { background: var(--fundo); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid var(--azul-confianca); display: flex; justify-content: space-between; align-items: center; }
+        .debt-item { background: var(--fundo-geral); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid var(--azul-confianca); display: flex; justify-content: space-between; align-items: center; }
         .debt-info h3 { margin: 0 0 0.5rem 0; color: var(--azul-confianca); font-size: 1.1rem; }
         .debt-info p { margin: 0; font-size: 0.9rem; color: #555; }
         .debt-total-display { font-size: 1.2rem; font-weight: bold; color: #000; display: flex; align-items: center; gap: 10px; }
-        .person-card { background: var(--fundo); padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem; border: 2px solid var(--azul-claro); }
+        .person-card { background: var(--fundo-geral); padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem; border: 2px solid var(--azul-claro); }
         .person-card h3 { margin-top: 0; color: var(--azul-confianca); border-bottom: 2px solid var(--amarelo-felicidade); padding-bottom: 0.5rem; }
-        .person-total { font-size: 1.3rem; font-weight: bold; color: #28a745; margin-top: 1rem; text-align: right; }
-        .mini-debt { background: white; padding: 0.8rem; border-radius: 6px; margin-bottom: 0.5rem; font-size: 0.9rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .person-total { font-size: 1.3rem; font-weight: bold; color: var(--verde-sucesso); margin-top: 1rem; text-align: right; }
+        .mini-debt { background: var(--fundo-cartao); padding: 0.8rem; border-radius: 6px; margin-bottom: 0.5rem; font-size: 0.9rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
 
         /* Chat */
         .chat-container { display: flex; flex-direction: column; height: 550px; }
@@ -116,7 +132,7 @@
     <div id="auth-screen">
         <div class="auth-card" id="login-form">
             <h1>Só vitorias 🎉</h1>
-            <p>Bem-vindo de volta! Faz login para aceder ao vosso painel.</p>
+            <p>Bem-vindo! Faz login para aceder ao vosso painel.</p>
             <input type="email" id="login-email" placeholder="O teu e-mail">
             <input type="password" id="login-password" placeholder="Palavra-passe">
             <button class="btn-primary" id="btn-login">Entrar</button>
@@ -125,7 +141,7 @@
 
         <div class="auth-card" id="register-form" style="display: none;">
             <h1>Criar Conta 💍</h1>
-            <p>Preenche os teus dados para começares a planear.</p>
+            <p>Preenche os dados. O administrador terá de autorizar o teu acesso.</p>
             <input type="text" id="reg-name" placeholder="O teu Nome">
             <input type="text" id="reg-phone" placeholder="Número de Telefone">
             <input type="email" id="reg-email" placeholder="E-mail">
@@ -147,7 +163,7 @@
     </div>
 
     <!-- ==========================================
-         APLICAÇÃO PRINCIPAL (PROTEGIDA)
+         APLICAÇÃO PRINCIPAL
     ========================================== -->
     <div id="app-screen">
         <header>
@@ -169,7 +185,7 @@
                     </select>
                 </div>
                 <div>
-                    <label>Câmbio do dia (1 R$ = ? Kz):</label>
+                    <label>Câmbio (1 R$ = ? Kz):</label>
                     <input type="number" id="daily-exchange-rate" value="170" style="width: 100px;">
                 </div>
             </div>
@@ -179,23 +195,25 @@
                 <button class="tab-btn" id="btn-tab-devedores">Devedores 💸</button>
                 <button class="tab-btn" id="btn-tab-fichas">Fichas 🗂️</button>
                 <button class="tab-btn" id="btn-tab-chat">Chat ❤️</button>
+                <button class="tab-btn" id="btn-tab-perfil">Perfil 👤</button>
+                <button class="tab-btn" id="btn-tab-admin">Admin 🛡️</button>
             </div>
         </header>
 
         <main>
-            <!-- ABA 1: METAS -->
+            <!-- ABA: METAS -->
             <section id="metas" class="tab-content active-tab">
                 <div class="card add-meta-card">
                     <h2>Criar Nova Meta 🌟</h2>
                     <div class="form-group row-inputs">
-                        <input type="text" id="main-goal-name" placeholder="Ex: Viagem da Kiriana">
+                        <input type="text" id="main-goal-name" placeholder="Ex: Viagem">
                         <button class="btn-primary" id="btn-create-meta">Criar Meta</button>
                     </div>
                 </div>
                 <div id="goals-container"></div>
             </section>
 
-            <!-- ABA 2: DEVEDORES -->
+            <!-- ABA: DEVEDORES -->
             <section id="devedores" class="tab-content">
                 <div class="card">
                     <h2>Registrar Novo Empréstimo 💸</h2>
@@ -205,17 +223,17 @@
                         <div class="date-group"><label>Data Empréstimo</label><input type="date" id="debt-start"></div>
                         <div class="date-group"><label>Data Devolução</label><input type="date" id="debt-end"></div>
                         <input type="number" id="debt-interest" placeholder="Juros %">
-                        <input type="number" id="debt-total" placeholder="Total a devolver (em R$)" readonly>
+                        <input type="number" id="debt-total" placeholder="Total a devolver" readonly>
                         <button id="add-debt-btn" class="btn-secondary">Salvar</button>
                     </div>
                 </div>
                 <div class="card">
-                    <h2>Valores a Receber (Geral) 📈</h2>
+                    <h2>Valores a Receber 📈</h2>
                     <ul id="debts-list-container" class="debt-list"></ul>
                 </div>
             </section>
 
-            <!-- ABA 3: FICHAS ISOLADAS -->
+            <!-- ABA: FICHAS ISOLADAS -->
             <section id="fichas" class="tab-content">
                 <div class="card">
                     <h2>Fichas de Devedores 🗂️</h2>
@@ -223,10 +241,10 @@
                 </div>
             </section>
 
-            <!-- ABA 4: CHAT PRIVADO -->
+            <!-- ABA: CHAT PRIVADO -->
             <section id="chat" class="tab-content">
                 <div class="card chat-container">
-                    <h2>Mural do Casal 💬 <button id="btn-clear-chat" class="btn-clear-all">Limpar Chat 🧹</button></h2>
+                    <h2>Mural do Casal 💬</h2>
                     <div class="chat-window" id="chat-window"></div>
                     <div class="chat-controls">
                         <input type="text" id="chat-input" placeholder="Escreve uma mensagem..." autocomplete="off">
@@ -234,6 +252,47 @@
                     </div>
                 </div>
             </section>
+
+            <!-- ABA: PERFIL (Novo) -->
+            <section id="perfil" class="tab-content">
+                <div class="card">
+                    <h2>Configurações de Segurança 🔒</h2>
+                    <p>Protege a tua sessão configurando o tempo de inatividade.</p>
+                    
+                    <div class="profile-setting">
+                        <div>
+                            <strong>Desconexão Automática (Inatividade)</strong>
+                            <p style="margin:0; font-size: 0.85rem; color: #555;">Desliga a conta se esqueceres o site aberto.</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="toggle-inatividade" checked>
+                            <span>Ativado</span>
+                        </label>
+                    </div>
+
+                    <div class="profile-setting" id="box-tempo-inatividade">
+                        <div>
+                            <strong>Tempo limite (minutos)</strong>
+                        </div>
+                        <div>
+                            <input type="number" id="input-tempo-inatividade" value="15" min="1">
+                            <button id="btn-salvar-perfil" class="btn-primary" style="padding: 0.4rem 1rem; margin-left: 10px;">Salvar</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ABA: ADMIN (Nova - Visível apenas para o Josemar) -->
+            <section id="admin" class="tab-content">
+                <div class="card">
+                    <h2>Gestão de Acessos 🛡️</h2>
+                    <p>Aqui podes ver quem está online e autorizar novos utilizadores.</p>
+                    <ul id="admin-users-list" class="user-list">
+                        <!-- Utilizadores renderizados via JS -->
+                    </ul>
+                </div>
+            </section>
+
         </main>
     </div>
 
@@ -252,13 +311,12 @@
         }
     </script>
 
-    <!-- SCRIPT FIREBASE E LÓGICA -->
+    <!-- SCRIPT FIREBASE E LÓGICA GERAL -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc, getDoc, getDocs, query, orderBy, serverTimestamp, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, updateProfile, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-        // A CHAVE CORRETA:
         const firebaseConfig = {
             apiKey: "AIzaSyA7tOOE3nRuDZnZ138ZGCYwxOjuZKpTMwg",
             authDomain: "so-vitorias.firebaseapp.com",
@@ -274,6 +332,12 @@
         
         let currentUserData = null; 
         let appLoaded = false;
+        const ADMIN_EMAIL = "nelumbanathan15@gmail.com"; // O teu email de super-admin!
+
+        // Variáveis de Inatividade
+        let inatividadeTimer;
+        let tempoLimite = 15 * 60 * 1000; // 15 min padrão
+        let inatividadeAtiva = true;
 
         const authScreen = document.getElementById('auth-screen');
         const lockScreen = document.getElementById('lock-screen');
@@ -281,107 +345,161 @@
         const displayUserName = document.getElementById('display-user-name');
 
         // ==========================================
-        // 1. SISTEMA DE AUTENTICAÇÃO E BLOQUEIO
+        // 1. SISTEMA DE AUTENTICAÇÃO E AUTORIZAÇÃO
         // ==========================================
-        onAuthStateChanged(auth, (user) => {
+        onAuthStateChanged(auth, async (user) => {
             if (user) {
-                currentUserData = user;
-                displayUserName.innerText = `Olá, ${user.displayName || 'Parceiro'}!`;
-                authScreen.style.display = 'none';
+                // Ir buscar os dados do utilizador à base de dados para ver se está autorizado
+                const userDocRef = doc(db, "usuarios", user.uid);
+                const userSnap = await getDoc(userDocRef);
                 
-                // Verifica se a biometria está ativada neste aparelho
-                if (localStorage.getItem("biometria_ativa") === "true") {
-                    lockScreen.style.display = 'flex';
-                    appScreen.style.display = 'none';
-                } else {
-                    lockScreen.style.display = 'none';
-                    appScreen.style.display = 'block';
-                    iniciarApp();
+                if (userSnap.exists()) {
+                    const userData = userSnap.data();
+                    
+                    // Bloqueia quem não está autorizado (exceto tu, o admin)
+                    if (userData.autorizado === false && user.email !== ADMIN_EMAIL) {
+                        alert("🔒 Acesso negado! O Administrador (Josemar) ainda não autorizou a tua conta.");
+                        signOut(auth);
+                        return;
+                    }
+
+                    // Marca o utilizador como ONLINE
+                    await updateDoc(userDocRef, { online: true, ultimoAcesso: serverTimestamp() });
+                    
+                    // Carrega definições de inatividade do utilizador
+                    if (userData.inatividadeAtiva !== undefined) {
+                        inatividadeAtiva = userData.inatividadeAtiva;
+                        tempoLimite = (userData.tempoInatividade || 15) * 60 * 1000;
+                        document.getElementById('toggle-inatividade').checked = inatividadeAtiva;
+                        document.getElementById('input-tempo-inatividade').value = userData.tempoInatividade || 15;
+                    }
+
+                    currentUserData = user;
+                    displayUserName.innerText = `Olá, ${user.displayName || 'Parceiro'}!`;
+                    authScreen.style.display = 'none';
+                    
+                    // Mostra a aba Admin se for o Josemar
+                    if (user.email === ADMIN_EMAIL) {
+                        document.getElementById('btn-tab-admin').style.display = 'inline-block';
+                        carregarAbaAdmin();
+                    } else {
+                        document.getElementById('btn-tab-admin').style.display = 'none';
+                    }
+
+                    // Biometria Check
+                    if (localStorage.getItem("biometria_ativa") === "true") {
+                        lockScreen.style.display = 'flex';
+                        appScreen.style.display = 'none';
+                    } else {
+                        lockScreen.style.display = 'none';
+                        appScreen.style.display = 'block';
+                        iniciarApp();
+                    }
+                    iniciarTimerInatividade(); // Inicia monitorização
                 }
             } else {
                 currentUserData = null;
+                pararTimerInatividade();
                 authScreen.style.display = 'flex';
                 lockScreen.style.display = 'none';
                 appScreen.style.display = 'none';
             }
         });
 
-        // ----------------- BIOMETRIA (WEBAUTHN) -----------------
-        const btnSetupBiometria = document.getElementById('btn-setup-biometria');
-        const btnUnlock = document.getElementById('btn-unlock');
-
-        // ATIVAR A BIOMETRIA
-        btnSetupBiometria.addEventListener('click', async () => {
-            if (!window.PublicKeyCredential) {
-                return alert("O teu dispositivo ou navegador não suporta biometria web.");
-            }
-            try {
-                // Prepara os dados para registar o rosto/dedo
-                const challenge = new Uint8Array(32);
-                window.crypto.getRandomValues(challenge);
-                const userId = new Uint8Array(16);
-                window.crypto.getRandomValues(userId);
-
-                const publicKey = {
-                    challenge: challenge,
-                    rp: { name: "Só Vitorias", id: window.location.hostname }, // Usa o teu domínio do GitHub
-                    user: { id: userId, name: currentUserData.email, displayName: currentUserData.displayName },
-                    pubKeyCredParams: [{ type: "public-key", alg: -7 }, { type: "public-key", alg: -257 }],
-                    authenticatorSelection: { authenticatorAttachment: "platform", userVerification: "required" },
-                    timeout: 60000
-                };
-                
-                // O navegador vai abrir o Face ID / Impressão digital aqui!
-                const cred = await navigator.credentials.create({ publicKey });
-                
-                // Guarda o ID localmente para saber que está protegido
-                const rawIdArray = new Uint8Array(cred.rawId);
-                const base64Id = btoa(String.fromCharCode.apply(null, rawIdArray));
-                localStorage.setItem("biometria_ativa", "true");
-                localStorage.setItem("biometria_id", base64Id);
-                
-                alert("🔐 Biometria ativada com sucesso! Da próxima vez que abrires a app, pedirá o teu rosto ou impressão digital.");
-                btnSetupBiometria.style.display = 'none';
-                
-            } catch (e) {
-                console.error(e);
-                alert("Falha ao configurar a biometria. Certifica-te que tens o bloqueio de ecrã ativo no telemóvel.");
+        // Quando o utilizador fecha a janela, tenta marcá-lo como offline
+        window.addEventListener('beforeunload', () => {
+            if (currentUserData) {
+                updateDoc(doc(db, "usuarios", currentUserData.uid), { online: false });
             }
         });
 
-        // DESBLOQUEAR A APP
+        // ==========================================
+        // 2. SISTEMA DE INATIVIDADE (AUTO-LOGOUT)
+        // ==========================================
+        function resetTimer() {
+            if (!inatividadeAtiva || !currentUserData) return;
+            clearTimeout(inatividadeTimer);
+            inatividadeTimer = setTimeout(async () => {
+                alert("⏰ Sessão expirada por inatividade. Por favor, faz login novamente.");
+                await updateDoc(doc(db, "usuarios", currentUserData.uid), { online: false });
+                signOut(auth);
+            }, tempoLimite);
+        }
+
+        function iniciarTimerInatividade() {
+            window.addEventListener('mousemove', resetTimer);
+            window.addEventListener('keydown', resetTimer);
+            window.addEventListener('click', resetTimer);
+            window.addEventListener('scroll', resetTimer);
+            resetTimer();
+        }
+
+        function pararTimerInatividade() {
+            clearTimeout(inatividadeTimer);
+            window.removeEventListener('mousemove', resetTimer);
+            window.removeEventListener('keydown', resetTimer);
+            window.removeEventListener('click', resetTimer);
+            window.removeEventListener('scroll', resetTimer);
+        }
+
+        // Salvar configurações do Perfil
+        document.getElementById('btn-salvar-perfil').addEventListener('click', async () => {
+            const isAtivo = document.getElementById('toggle-inatividade').checked;
+            const tempo = parseInt(document.getElementById('input-tempo-inatividade').value);
+            
+            if (tempo < 1) return alert("O tempo mínimo é 1 minuto.");
+
+            inatividadeAtiva = isAtivo;
+            tempoLimite = tempo * 60 * 1000;
+            
+            await updateDoc(doc(db, "usuarios", currentUserData.uid), {
+                inatividadeAtiva: isAtivo,
+                tempoInatividade: tempo
+            });
+            
+            alert("✅ Configurações de segurança guardadas com sucesso!");
+            resetTimer();
+        });
+
+        // Biometria (Mantida igual ao código anterior)
+        const btnSetupBiometria = document.getElementById('btn-setup-biometria');
+        const btnUnlock = document.getElementById('btn-unlock');
+
+        btnSetupBiometria.addEventListener('click', async () => {
+            if (!window.PublicKeyCredential) return alert("Dispositivo não suporta biometria web.");
+            try {
+                const challenge = new Uint8Array(32); window.crypto.getRandomValues(challenge);
+                const userId = new Uint8Array(16); window.crypto.getRandomValues(userId);
+                const publicKey = {
+                    challenge, rp: { name: "Só Vitorias", id: window.location.hostname },
+                    user: { id: userId, name: currentUserData.email, displayName: currentUserData.displayName },
+                    pubKeyCredParams: [{ type: "public-key", alg: -7 }, { type: "public-key", alg: -257 }],
+                    authenticatorSelection: { authenticatorAttachment: "platform", userVerification: "required" }, timeout: 60000
+                };
+                const cred = await navigator.credentials.create({ publicKey });
+                const rawIdArray = new Uint8Array(cred.rawId);
+                localStorage.setItem("biometria_ativa", "true");
+                localStorage.setItem("biometria_id", btoa(String.fromCharCode.apply(null, rawIdArray)));
+                alert("🔐 Biometria ativada com sucesso!");
+                btnSetupBiometria.style.display = 'none';
+            } catch (e) { alert("Falha ao configurar biometria. Verifica se o bloqueio de ecrã está ativo no telemóvel."); }
+        });
+
         btnUnlock.addEventListener('click', async () => {
             const storedId = localStorage.getItem("biometria_id");
             if (!storedId) return;
             try {
-                const challenge = new Uint8Array(32);
-                window.crypto.getRandomValues(challenge);
-
+                const challenge = new Uint8Array(32); window.crypto.getRandomValues(challenge);
                 const binaryString = atob(storedId);
                 const rawId = new Uint8Array(binaryString.length);
                 for (let i = 0; i < binaryString.length; i++) rawId[i] = binaryString.charCodeAt(i);
-
-                const publicKey = {
-                    challenge: challenge,
-                    allowCredentials: [{ type: "public-key", id: rawId }],
-                    userVerification: "required"
-                };
-                
-                // O navegador pede o Face ID / Dedo aqui!
-                await navigator.credentials.get({ publicKey });
-                
-                // Desbloqueado com Sucesso!
+                await navigator.credentials.get({ publicKey: { challenge, allowCredentials: [{ type: "public-key", id: rawId }], userVerification: "required" } });
                 lockScreen.style.display = 'none';
                 appScreen.style.display = 'block';
                 iniciarApp();
-                
-            } catch (e) {
-                console.error(e);
-                alert("Biometria falhou! Tenta novamente.");
-            }
+            } catch (e) { alert("Biometria falhou!"); }
         });
 
-        // FORÇAR SAÍDA SE A BIOMETRIA FALHAR
         document.getElementById('btn-force-logout').addEventListener('click', () => {
             localStorage.removeItem("biometria_ativa");
             localStorage.removeItem("biometria_id");
@@ -398,39 +516,96 @@
             try {
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 await updateProfile(userCredential.user, { displayName: nome });
-                await setDoc(doc(db, "usuarios", userCredential.user.uid), { nome, telefone, email, dataRegisto: serverTimestamp() });
-                alert("Conta criada com sucesso! Bem-vindo ao Só Vitorias.");
+                
+                // O administrador tem autorização imediata. Outros começam como FALSE.
+                const eAdmin = (email === ADMIN_EMAIL);
+                
+                await setDoc(doc(db, "usuarios", userCredential.user.uid), { 
+                    nome, telefone, email, 
+                    dataRegisto: serverTimestamp(),
+                    autorizado: eAdmin, // Só entra se for o admin ou se for autorizado depois
+                    online: eAdmin,
+                    inatividadeAtiva: true,
+                    tempoInatividade: 15
+                });
+                
+                if(!eAdmin) {
+                    alert("Conta criada com sucesso! ⚠️ No entanto, precisas que o Administrador aprove o teu acesso antes de poderes entrar.");
+                    signOut(auth);
+                } else {
+                    alert("Bem-vindo Administrador!");
+                }
             } catch (error) { alert("Erro ao criar conta: " + error.message); }
         });
 
         document.getElementById('btn-login').addEventListener('click', async () => {
-            try {
-                await signInWithEmailAndPassword(auth, document.getElementById('login-email').value, document.getElementById('login-password').value);
-            } catch (error) { alert("Erro no Login. Verifica os dados!"); }
+            try { await signInWithEmailAndPassword(auth, document.getElementById('login-email').value, document.getElementById('login-password').value); } 
+            catch (error) { alert("Erro no Login. Verifica os dados!"); }
         });
 
-        document.getElementById('btn-logout').addEventListener('click', () => {
+        document.getElementById('btn-logout').addEventListener('click', async () => {
+            if(currentUserData) await updateDoc(doc(db, "usuarios", currentUserData.uid), { online: false });
             signOut(auth);
         });
 
 
         // ==========================================
-        // 2. FUNÇÕES DA APLICAÇÃO (METAS, DEVEDORES, CHAT)
+        // 3. ABA DO ADMINISTRADOR (GERIR ACESSOS)
+        // ==========================================
+        function carregarAbaAdmin() {
+            onSnapshot(collection(db, "usuarios"), (snapshot) => {
+                const lista = document.getElementById('admin-users-list');
+                lista.innerHTML = '';
+                snapshot.forEach((docSnap) => {
+                    const usr = docSnap.data();
+                    const statusClass = usr.online ? 'status-online' : 'status-offline';
+                    const statusText = usr.online ? 'Online 🟢' : 'Offline 🔴';
+                    const btnAcao = usr.autorizado 
+                        ? `<button class="btn-auth-toggle btn-auth-yes" data-id="${docSnap.id}" data-action="bloquear">Revogar Acesso 🚫</button>`
+                        : `<button class="btn-auth-toggle btn-auth-no" data-id="${docSnap.id}" data-action="autorizar">Autorizar Acesso ✅</button>`;
+
+                    lista.innerHTML += `
+                        <li class="user-item">
+                            <div>
+                                <strong>${usr.nome}</strong> (${usr.email})<br>
+                                <span class="status-badge ${statusClass}">${statusText}</span>
+                            </div>
+                            <div>
+                                ${usr.email === ADMIN_EMAIL ? '<span style="font-size:0.8rem; color:gray;">Admin</span>' : btnAcao}
+                            </div>
+                        </li>
+                    `;
+                });
+            });
+
+            document.getElementById('admin-users-list').addEventListener('click', async (e) => {
+                if (e.target.classList.contains('btn-auth-toggle')) {
+                    const uid = e.target.dataset.id;
+                    const acao = e.target.dataset.action;
+                    const novoStatus = (acao === 'autorizar');
+                    await updateDoc(doc(db, "usuarios", uid), { autorizado: novoStatus });
+                }
+            });
+        }
+
+
+        // ==========================================
+        // 4. FUNÇÕES DA APLICAÇÃO (METAS, DEVEDORES, CHAT)
         // ==========================================
         function iniciarApp() {
-            if(appLoaded) return; // Evita carregar os eventos duas vezes
+            if(appLoaded) return;
             appLoaded = true;
             
-            // Verifica se deve esconder o botão de configurar biometria (se já configurou)
             if (localStorage.getItem("biometria_ativa") === "true") {
                 document.getElementById('btn-setup-biometria').style.display = 'none';
             }
 
-            // Abas
             document.getElementById('btn-tab-metas').addEventListener('click', (e) => showTab('metas', e));
             document.getElementById('btn-tab-devedores').addEventListener('click', (e) => showTab('devedores', e));
             document.getElementById('btn-tab-fichas').addEventListener('click', (e) => showTab('fichas', e));
             document.getElementById('btn-tab-chat').addEventListener('click', (e) => showTab('chat', e));
+            document.getElementById('btn-tab-perfil').addEventListener('click', (e) => showTab('perfil', e));
+            document.getElementById('btn-tab-admin').addEventListener('click', (e) => showTab('admin', e));
             
             function showTab(tabId, event) {
                 document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active-tab'));
@@ -508,7 +683,7 @@
                 }
             };
 
-            // Devedores e Fichas
+            // Devedores
             document.getElementById('add-debt-btn').onclick = async () => {
                 const total = document.getElementById('debt-total').value;
                 await addDoc(collection(db, "devedores"), {
@@ -571,13 +746,6 @@
             
             document.getElementById('chat-window').onclick = async (e) => {
                 if(e.target.classList.contains('btn-del-msg')) await deleteDoc(doc(db, "mensagens", e.target.dataset.id));
-            };
-            
-            document.getElementById('btn-clear-chat').onclick = async () => {
-                if(confirm("🚨 APAGAR TODO o histórico?")) {
-                    const qs = await getDocs(collection(db, "mensagens"));
-                    qs.forEach(async (d) => await deleteDoc(doc(db, "mensagens", d.id)));
-                }
             };
         }
     </script>
